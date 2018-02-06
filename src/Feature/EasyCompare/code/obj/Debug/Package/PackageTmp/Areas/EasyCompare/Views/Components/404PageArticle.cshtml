@@ -1,0 +1,33 @@
+﻿@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.Modules.Page404Model>
+@if (Model != null)
+{
+    <div class="main-container">
+        <span class="article__title">@Translate.TextByDomain(Constants.PageLabelsPageNotFound, "WeareLost")</span><br />
+
+        <div class="article__summary">
+            @Editable(x => x.PageArticleTitle)
+        </div>
+        @if (Sitecore.Context.PageMode.IsExperienceEditor)
+        {
+            @RenderImage(x => x.PageArticleImage, new { }, true)
+        }
+        else
+        {
+            <div class="article__image" style="background-image: url('@Model.PageArticleImage.Src')"></div>
+        }
+
+
+        <div class="p404-form">
+            <div class="input-container">
+                <input placeholder="@Translate.TextByDomain(Constants.PageLabelsPageNotFound, "TypeHereToSearch")" class="form-input-search" type="text" />
+            </div>
+            <div class="input-container">
+                <button class="button-search">@Translate.TextByDomain(Constants.SearchDomain, "search")</button>
+            </div>
+        </div>
+
+
+    </div>
+}

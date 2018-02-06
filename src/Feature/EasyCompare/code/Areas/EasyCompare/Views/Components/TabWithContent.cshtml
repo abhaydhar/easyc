@@ -1,0 +1,97 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.TabWithContent>
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@using Sitecore.Mvc;
+
+@if (Model != null)
+{
+    <div class="main-container">
+        <div class="tile__links">
+            <div class="tile__row">
+                @if (Sitecore.Context.PageMode.IsExperienceEditor)
+                {
+                <div class="tile__link onwhite">@RenderLink(Model, x => x.Tabs.ToList()[0].LinkUrl, isEditable: true)</div>
+                <div class="tile__link onwhite">@RenderLink(Model, x => x.Tabs.ToList()[1].LinkUrl, isEditable: true)</div>
+                <div class="tile__link onwhite">@RenderLink(Model, x => x.Tabs.ToList()[2].LinkUrl, isEditable: true)</div>
+                }
+                else
+                {
+                    if (Model.Tabs.Any())
+                    {
+                        switch (Model.PageType.Id.ToString().ToUpper())
+                        {
+                            case Constants.SupportPageType:
+                                if (Model.Tabs.ToList()[0] != null && Model.Tabs.ToList()[0].LinkUrl != null)
+                                {
+                <div class="tile__link onwhite"><a id="al_all" class="active">@Model.Tabs.ToList()[0].LinkUrl.Text</a></div>
+                                }
+                                if (Model.Tabs.ToList()[1] != null && Model.Tabs.ToList()[1].LinkUrl != null)
+                                {
+                <div class="tile__link onwhite"><a id="al_promotions" href="@Model.Tabs.ToList()[1].LinkUrl.Url">@Model.Tabs.ToList()[1].LinkUrl.Text</a></div>
+                                }
+                                if (Model.Tabs.ToList()[2] != null && Model.Tabs.ToList()[2].LinkUrl != null)
+                                {
+                <div class="tile__link onwhite"><a id="al_news" href="@Model.Tabs.ToList()[2].LinkUrl.Url">@Model.Tabs.ToList()[2].LinkUrl.Text</a></div>
+                                }
+                                break;
+                            case Constants.FAQPageType:
+                                if (Model.Tabs.ToList()[0] != null && Model.Tabs.ToList()[0].LinkUrl != null)
+                                {
+                <div class="tile__link onwhite "><a id="al_all" href="@Model.Tabs.ToList()[0].LinkUrl.Url">@Model.Tabs.ToList()[0].LinkUrl.Text</a></div>
+                                }
+                                if (Model.Tabs.ToList()[1] != null && Model.Tabs.ToList()[1].LinkUrl != null)
+                                {
+                <div class="tile__link onwhite"><a id="al_promotions" class="active">@Model.Tabs.ToList()[1].LinkUrl.Text</a></div>
+                                }
+                                if (Model.Tabs.ToList()[2] != null && Model.Tabs.ToList()[2].LinkUrl != null)
+                                {
+                <div class="tile__link onwhite"><a id="al_news" href="@Model.Tabs.ToList()[2].LinkUrl.Url">@Model.Tabs.ToList()[2].LinkUrl.Text</a></div>
+                                }
+                                break;
+                            case Constants.AskQuestionPageType:
+                                if (Model.Tabs.ToList()[0] != null && Model.Tabs.ToList()[0].LinkUrl != null)
+                                {
+                <div class="tile__link onwhite "><a id="al_all" href="@Model.Tabs.ToList()[0].LinkUrl.Url">@Model.Tabs.ToList()[0].LinkUrl.Text</a></div>
+                                }
+                                if (Model.Tabs.ToList()[1] != null && Model.Tabs.ToList()[1].LinkUrl != null)
+                                {
+                <div class="tile__link onwhite"><a id="al_promotions" href="@Model.Tabs.ToList()[1].LinkUrl.Url">@Model.Tabs.ToList()[1].LinkUrl.Text</a></div>
+                                }
+                                if (Model.Tabs.ToList()[2] != null && Model.Tabs.ToList()[2].LinkUrl != null)
+                                {
+                <div class="tile__link onwhite"><a id="al_news" class="active">@Model.Tabs.ToList()[2].LinkUrl.Text</a></div>
+                                }
+                                break;
+                        }
+                    }
+                }
+
+
+            </div>
+        </div>
+        @if (Model.PageType.Id.ToString().ToUpper() == Constants.SupportPageType)
+        {
+            @Html.Partial("/Areas/EasyCompare/Views/Components/Support.cshtml", Model.SupportContent)
+        }
+        @if (Model.PageType.Id.ToString().ToUpper() == Constants.FAQPageType)
+        {
+
+            @Html.Partial("/Areas/EasyCompare/Views/Components/FAQ.cshtml", Model.FAQContent)
+
+
+        }
+        @if (Model.PageType.Id.ToString().ToUpper() == Constants.AskQuestionPageType)
+        {
+          @Html.Partial("/Areas/EasyCompare/Views/Components/AskaQuestion.cshtml", Model.AskQuestionContent)
+        }
+        @Html.Sitecore().Placeholder("tabcontent")
+    </div>
+
+}
+else
+{
+    if (Sitecore.Context.PageMode.IsExperienceEditor)
+    {
+        @Html.Raw("Enter the Datasource");
+    }
+}

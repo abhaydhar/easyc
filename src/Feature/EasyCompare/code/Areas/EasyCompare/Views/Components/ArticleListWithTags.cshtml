@@ -1,0 +1,120 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.IArticles>
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+<script src="/assets/easycompare/js/article.js"></script>
+@if (Model != null)
+{
+    <div class="main-container graybg">
+        <div class="tiles_white graybg">
+            <div class="tile__links">
+                <div class="tile__row">
+                    @if (Model.ArticlesWithTagList != null && Model.ArticlesWithTagList.Any() )
+                    {
+                        var activeclass = "active";
+                        if (Model.activeClassTag == "all")
+                        {
+                        <div class="tile__link onwhite"><a id="al_all" onclick="togglenews('all','@Model.articlePageUrl')" class="active">@Translate.TextByDomain(Constants.ArticlesDomain, "All")</a></div>
+                        }
+                        else
+                        {
+                            <div class="tile__link onwhite"><a id="al_all" onclick="togglenews('all', '@Model.articlePageUrl')" >@Translate.TextByDomain(Constants.ArticlesDomain, "All")</a></div>
+                        }
+                        for (int i=0;i< Model.ArticleTagList.Count();i++)
+                        {
+                           
+                                var id = "al_" + Model.ArticleTagList[i].Replace(' ', '_');
+                                if (Model.activeClassTag == Model.ArticleTagID[i])
+                                {
+                                    <div class="tile__link onwhite"><a id="@id" onclick="togglenews('@Model.ArticleTagID[i]','@Model.articlePageUrl')" class="active">@Model.ArticleTagList[i]</a></div>
+                                }
+                                else
+                                {
+                                    <div class="tile__link onwhite"><a id="@id" onclick="togglenews('@Model.ArticleTagID[i]','@Model.articlePageUrl')">@Model.ArticleTagList[i]</a></div>
+                                }
+                        }
+                    }
+
+
+                </div>
+            </div>
+            <div class="tiles">
+                <div class="generic_title"> @Editable(Model, x => x.Title)</div>
+                <div class="generic_snippet"> @Editable(Model, x => x.SubTitle) </div>
+
+                <div class="tile__items">
+                    <div class="grid ">
+
+                        @if (Model.ArticlesWithTagList != null && Model.ArticlesWithTagList.Any())
+                        {
+                            foreach (var r in Model.ArticlesWithTagList)
+                            {
+                                if(r!=null)
+                                { 
+                                <div class="al_all tile__item grid-item articles">
+                                    <div class="tile__item__details">
+                                        @if (r.ArticleImage != null)
+                                        {
+
+                                            if (Sitecore.Context.PageMode.IsExperienceEditor)
+                                            {
+                                                @RenderImage(r, x => x.ArticleImage, new { }, true)
+                                            }
+                                            else
+                                            {
+                                                <div class="tile__item__thumbnail" style="background-image: url('@r.ArticleImage.Src')"></div>
+                                            }
+                                        }
+                                        @if (r.ArticleDate != null)
+                                        {
+                                            <div class="tile__item__date">
+
+                                                @{System.Globalization.CultureInfo provider = System.Globalization.CultureInfo.InvariantCulture;}
+                                                @if (Sitecore.Context.PageMode.IsExperienceEditor)
+                                                {
+                                                    @Editable(r, x => x.ArticleDate, x => x.ArticleDate.ToString("MMMM dd yyyy"))
+                                                }
+                                                else
+                                                {
+                                                    @Sitecore.DateUtil.FormatDateTime(r.ArticleDate, "dd MMM yyyy", provider)
+                                                }
+                                            </div>
+                                                    }
+
+
+                                        
+                                            <div class="tile__item__title"><a href="@r.Url">@Editable(r, x => x.Title)</a></div>
+                                        
+                                            <div class="tile__item__snippet">@Editable(r, x => x.SubTitle) </div>
+                                        
+                                            <div>
+
+
+                                                <div class="tile__item__read_more">
+                                                    <a href="@r.Url">@Editable(Model, x => x.ArticleLinkText)</a>
+                                                </div>
+                                            </div>
+
+
+
+
+</div>
+                                </div>
+                                                            }
+                                                        }
+                                                    }
+                    </div>
+                </div>
+               
+                   
+               
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    if (Sitecore.Context.PageMode.IsExperienceEditor)
+    {
+        @Html.Raw("Enter the Datasource");
+    }
+}

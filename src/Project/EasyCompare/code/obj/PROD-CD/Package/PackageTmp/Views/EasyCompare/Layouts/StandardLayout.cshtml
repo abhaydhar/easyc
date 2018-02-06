@@ -1,0 +1,57 @@
+﻿@using Sitecore.Mvc.Analytics.Extensions
+@using Sitecore.Mvc;
+@using Celes.Framework.Common.Extensions
+
+@{
+    string pageEditorCss = string.Empty;
+
+    if (Sitecore.Context.PageMode.IsPageEditor)
+    {
+        pageEditorCss = "sitecore-editor";
+    }
+
+    if (Sitecore.Context.PageMode.IsPreview)
+    {
+        pageEditorCss = "sitecore-preview";
+    }
+    var siteLangeuage = Sitecore.Context.Language.ToString();
+
+    var ngControllerName = Sitecore.Context.Item.Fields[new Sitecore.Data.ID("{5949CDD2-D5A2-4972-AD13-B0B406188A4E}")];
+    var hasNgController = (ngControllerName != null && !string.IsNullOrEmpty(ngControllerName.Value));
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Language" content="en,th" />
+    <link href="/assets/easycompare/css/main.css" rel="stylesheet" />
+    <link href="/assets/easycompare/css/swiper.min.css" rel="stylesheet" />
+    @Html.Sitecore().Placeholder("PageCss")
+    <title>EasyCompare</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script type="text/javascript" src="https://ajax.microsoft.com/ajax/jQuery/jquery-1.4.2.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+    <script type="text/javascript" src="/assets/easycompare/js/ec.quote.min.js"></script>
+</head>
+<div class="bgloader"><div class="loader"></div></div>
+
+<body ng-app="easyCompare" @Html.CelesAntiForgeryToken() @(hasNgController ? @Html.Raw("ng-controller='" + ngControllerName.Value + "'") : null) @(!Sitecore.Context.PageMode.IsExperienceEditor ? "ng-cloak" : "")>
+
+    <header class="centered-content">
+        @Html.Sitecore().Placeholder("Header")
+    </header>
+    <main class="centered-content">
+        @Html.Sitecore().Placeholder("Main")
+    </main>
+   
+        @Html.Sitecore().Placeholder("Footer")
+   
+    @Html.Sitecore().Placeholder("CallMeBack")
+
+    <script src="./assets/easycompare/js/common.js"></script>
+    <script src="./assets/easycompare/js/main-.js"></script>
+    
+
+</body>
+</html>

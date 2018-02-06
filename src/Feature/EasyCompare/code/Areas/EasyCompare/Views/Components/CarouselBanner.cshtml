@@ -1,0 +1,32 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.BannerCarousel>
+@if (Model != null)
+{
+    <div class="absolute-holder">
+        <div class="slideshow">
+            @if (Model.BannerImage != null)
+            {
+                if (Sitecore.Context.PageMode.IsExperienceEditor)
+                {
+                    <div class="slideshow__container">
+                        <h2>@Editable(x => x.Title)</h2>
+                        <h3>@Editable(x => x.SubTitle)</h3>
+                    </div>
+                        <div class="slideshow__item">
+
+                            @RenderImage(x => x.BannerImage, new { }, true)
+
+                        </div>
+                }
+                else
+                {
+                    <div class="slideshow__item" style="background-image: url('@Model.BannerImage.Src')">
+                        <div class="slideshow__container">
+                            <h2>@Model.Title</h2>
+                            <h3>@Model.SubTitle</h3>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,35 @@
+﻿@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@model Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.PolicyDetails
+@{
+    string arrow = "< ";
+    string flg = "twocolumns";
+    if (!String.IsNullOrEmpty(Model.CarName))
+    {
+        flg = "";
+    }
+}
+<div class="your-car-container @flg">
+    <div class="your-car">
+        <div style="word-wrap: break-word; width: 100%;">
+            <span class="your-car-label"> @Translate.TextByDomain(Constants.PolicyListDomain, "Your Car"): </span>
+            <span class="your-car-name">{{quote.asset.carMake}},</span>
+            <span class="your-car-name">
+                {{quote.asset.carModel}},
+            </span>
+            <span class="your-car-name">
+                {{quote.asset.carYear}} ({{quote.asset.carYear + motorCarConstants.thaiYearDiff}}),
+            </span>
+            <span class="your-car-name">
+                {{quote.asset.carClass}}
+            </span>
+        </div>
+        <div>
+            <span class="your-car-label">&nbsp </span>
+            <span class="your-car-name"> &nbsp</span>
+        </div>
+        <div class="car-change" ng-click="editCarDetail($event)">@arrow@Translate.TextByDomain(Constants.PolicyListDomain, "Change")</div>
+    </div>
+</div>
+
+

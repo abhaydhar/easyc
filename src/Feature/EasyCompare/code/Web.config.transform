@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  This is a shim config for your Habitat feature. It is not deployed to the web site.
+  -->
+<configuration>
+    <appSettings>
+        <add key="EasyCompare.PortalServerApiBaseUrl" value="http://portal.local.budget.com.th/" />
+        <add key="EasyCompare.PolicyServerApiBaseUrl" value="http://portal.local.budget.com.th/policy/"/>
+    </appSettings>
+</configuration>

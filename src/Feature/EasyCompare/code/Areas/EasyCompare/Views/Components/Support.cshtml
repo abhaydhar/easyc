@@ -1,0 +1,21 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.ImageWithDescription>
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@if (Model != null)
+{
+<span class="article__title">@Editable(Model, x => x.Title)</span><br />
+<br /><br /><br />
+<div class="article__summary"> @Editable(Model, x => x.SubTitle)</div>
+
+
+    if (Sitecore.Context.PageMode.IsExperienceEditor)
+    {
+        @Editable(Model, x => x.Body)
+    }
+    else
+    {
+        @Html.Raw(Model.Body)
+    }
+
+
+}

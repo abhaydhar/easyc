@@ -1,0 +1,179 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Footer>
+
+@if (Model != null)
+{
+    <div class="footer__links centered-content">
+        <div class="footer__links__sub__menu">
+            <div class="footer__links__sub__menu__item foot-menu-item-head">
+                @if (Model.LogoImage != null)
+                {
+                    <div class="footer__col__item logo">
+                        @RenderImage(x => x.LogoImage, new { width = 210, @class = "whitelogo" }, true)
+                    </div>
+                }
+
+                @if (!String.IsNullOrEmpty(Model.LeftCopyRightText))
+                {
+                    @Editable(x => x.LeftCopyRightText)
+                }
+                <div class="footer__col__item logos">
+                    @if (Model.PartnerImageList != null)
+                    {
+                        foreach (var partner in Model.PartnerImageList)
+                        {
+                            if (Sitecore.Context.PageMode.IsExperienceEditor)
+                            {
+                               <div class="footer_logo_container">
+                                    @*<div class="footer_logo">*@
+                                        @RenderImage(partner, x => x.ImageCopy, new { width = 20 , @style= "background-size: 100%;" }, true)
+                                    @*</div>*@
+                                </div>
+                            }
+                            else
+                            {
+                                if (partner.ImageCopy != null)
+                                {
+                                    <div class="footer_logo_container">
+                                        <div class="footer_logo" style="background-image: url('@partner.ImageCopy.Src'); background-size: 100%;"></div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <img src="" />
+                                }
+
+                            }
+                        }
+
+                    }
+                </div>
+            </div>
+
+            @foreach (var bLinks in Model.FooterBottomLinks)
+            {
+                <div class="footer__links__sub__menu__item foot-menu-item show-for-medium">
+                    <ul>
+                        <li class="footer__links__sub__menu__item__header">@bLinks.LinksComponentTitle</li>
+                        @foreach (var lnk in bLinks.LinksList)
+                        {
+                            <li>
+                                @if (Sitecore.Context.PageMode.IsExperienceEditorEditing)
+                                {
+                                    @RenderLink(lnk, x => x.LinkUrl, isEditable: true)
+                                }
+
+                                else
+                                {
+                                    <a href="@lnk.LinkUrl.Url">@lnk.LinkUrl.Text</a>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="footer__links__sub__menu__item foot-menu-item-end show-for-small-up">
+                <div class="footer__col__item bold spacetobottom">
+                    <a class="phonelink_footer  fphone" href="tel:@Model.AdvisoryCenterPhoneNo">@Editable(x => x.AdvisoryCenterPhoneNo)</a>
+                </div>
+                <div class="footer__col__item bold spacetobottom">
+                    <a class="phonelink_footer fclock">@Editable(x => x.AdvisoryWorkTime)</a>
+                </div>
+                <div class="footer__col__item bold whitetext ">
+                    <a class="phonelink_footer  femail" href="mailto:@Model.AdvisoryMailIdContact">@Editable(x => x.AdvisoryMailIdContact)</a>
+                </div>
+                <div class="footer__col__item bold margintop whitetext">
+                    @Editable(x => x.SocialLinksTitle)
+                </div>
+                <div class="footer__col__item social-icons">
+                    <span>
+                        @using (BeginRenderLink(x => x.FacebookUrl, isEditable: true))
+                        {
+                            if (Sitecore.Context.PageMode.IsExperienceEditor)
+                            {
+                                @RenderImage(x => x.FacebookImage, new { }, true)
+                            }
+                            else
+                            {
+                                if (Model.FacebookImage != null)
+                                {
+                                    <img src="@Model.FacebookImage.Src" />
+                                }
+                                else
+                                {
+                                    <img src="" />
+                                }
+
+                            }
+
+                        }
+                    </span>
+                    <span>
+                        @using (BeginRenderLink(x => x.TwitterUrl, isEditable: true))
+                        {
+                            if (Sitecore.Context.PageMode.IsExperienceEditor)
+                            {
+                                @RenderImage(x => x.TwitterImage, new { }, true)
+                            }
+                            else
+                            {
+                                if (Model.TwitterImage != null)
+                                {
+                                    <img src="@Model.TwitterImage.Src" />
+                                }
+                                else
+                                {
+                                    <img src="" />
+                                }
+
+                            }
+                        }
+                    </span>
+                    <span>
+                        @using (BeginRenderLink(x => x.YoutubeUrl, isEditable: true))
+                        {
+                            if (Sitecore.Context.PageMode.IsExperienceEditor)
+                            {
+                                @RenderImage(x => x.YoutubeImage, new { }, true)
+                            }
+                            else
+                            {
+                                if (Model.YoutubeImage != null)
+                                {
+                                    <img src="@Model.YoutubeImage.Src" />
+                                }
+                                else
+                                {
+                                    <img src="" />
+                                }
+
+                            }
+                        }
+                    </span>
+                    <span>
+                        @using (BeginRenderLink(x => x.LineUrl, isEditable: true))
+                        {
+                            if (Sitecore.Context.PageMode.IsExperienceEditor)
+                            {
+                                @RenderImage(x => x.LineImage, new { }, true)
+                            }
+                            else
+                            {
+                                if (Model.LineImage != null)
+                                {
+                                    <img src="@Model.LineImage.Src" />
+                                }
+                                else
+                                {
+                                    <img src="" />
+                                }
+
+                            }
+                        }
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

@@ -1,0 +1,342 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.InsuranceQuoteModel>
+@using Sitecore.Globalization
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+
+@{
+    List<string> brandlist = new List<string>();
+}
+
+@{
+    var insuranceclass = "insurancesearch";
+    var inputContainerClass = "input-container";
+    var buttonclass = "button-find";
+    if (Model.IsFullButtonWidth == "1")
+    {
+        insuranceclass = "cd-insurancesearch";
+        inputContainerClass = "cd-input-container";
+        buttonclass = "cd-button-find";
+    }
+
+
+}
+
+@if (Model != null)
+{
+
+    <ng-form name="carForm">
+        <div class="@insuranceclass">
+            <div class="searchform__title">@Model.QuoteTitle</div>
+            <div class="@inputContainerClass">
+                <input placeholder="@Model.BrandLabel" onclick="show('lb_brand')" ng-class="{'inputerror': carForm.is_Brand.$invalid && carForm.is_Brand.$dirty}" class="form-input adddownarrow" ng-model="car.make" type="text" id="is_Brand" name="is_Brand" readonly ng-required="true" />
+            </div>
+            <div class="@inputContainerClass">
+                <input placeholder="@Model.ModelLabel" ng-disabled="!car.makeId || car.makeId == 0" onclick="show('lb_model')" ng-class="{'inputerror': carForm.is_Model.$invalid && carForm.is_Model.$dirty, 'input-disabled': !car.makeId || car.makeId == 0}" class="form-input adddownarrow" ng-model="car.model" type="text" id="is_Model" name="is_Model" readonly ng-required="true" />
+            </div>
+            <div class="@inputContainerClass">
+                <input placeholder="@Model.YearLabel" ng-disabled="!car.makeId || car.makeId == 0" onclick="show('lb_year')" ng-class="{'inputerror': carForm.is_Year.$invalid && carForm.is_Year.$dirty, 'input-disabled': !car.makeId || car.makeId == 0}" class="form-input adddownarrow" ng-model="car.carYearDisplay" type="text" id="is_Year" name="is_Year" readonly ng-required="true" />
+            </div>
+            <div class="@inputContainerClass">
+                <input placeholder="@Model.InsuranceTypeLabel" ng-disabled="!car.makeId || car.makeId == 0" onclick="show('lb_itype')" ng-class="{'inputerror': carForm.is_InsuranceT.$invalid && carForm.is_InsuranceT.$dirty, 'input-disabled': !car.makeId || car.makeId == 0}" class="form-input adddownarrow" ng-model="car.insuranceType" type="text" id="is_InsuranceT" name="is_InsuranceT" readonly ng-required="true" />
+            </div>
+            <div class="@inputContainerClass">
+                <button ng-click="getCarQuote(carForm, $event)" class="@buttonclass">@Model.QuoteCTALabel</button>
+            </div>
+        </div>
+    </ng-form>
+
+    <div id="lb_brand" class="lightbox">
+        <div class="lightbox-content">
+            <span class="lightboxclose cursor" onclick="closebox('lb_brand');">&times;</span>
+            <div id="lightbox_title" class="lightbox-title"> <h2>@Model.BrandPopupTitle</h2></div>
+            <div id="lightbox_contents" class="lightbox-inner-content">
+
+                <div class="lb-form">
+                    <div class="input-container">
+                        <input ng-change="filterMake()" id="makeFilterInput" ng-model="formFilter.make" placeholder="@Model.BrandSearchText" class="form-input" type="text">
+                    </div>
+
+                </div>
+
+
+                <div id="lb_brands" class="lb-brands">
+
+                    <div ng-show="!filteredMakeList || filteredMakeList == null || filteredMakeList.length ==0">
+                        <div class="brand-container" ng-click="selectMake(item)" ng-repeat="item in fixedMakeList">
+                            <div>
+                                <span> {{item.name}} </span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="brand-container" ng-click="searchMakeByAlphabet(item)" ng-repeat="item in alphabetList">
+                            <div>
+                                <span> {{item}} </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="brand-container" ng-click="selectMake(item)" ng-repeat="item in filteredMakeList">
+                        <div>
+                            <span> {{item.name}} </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+        <div id="lb_model" class="lightbox" style="display: none;">
+            <div class="lightbox-content">
+                <span class="lightboxclose cursor" onclick="closebox('lb_model');">×</span>
+                <div id="lightbox_title" class="lightbox-title"> <h2>@Model.ModelPopupTitle</h2></div>
+                <div id="lightbox_contents" class="lightbox-inner-content">
+
+                    <div class="lb-form">
+                        <div class="input-container">
+                            <input ng-change="filterModel()" ng-model="formFilter.model" placeholder="@Model.ModelSearchText" class="form-input" type="text">
+                        </div>
+                    </div>
+
+
+                    <div id="lb_models" class="lb-brands">
+
+                        <div class="brand-container" ng-click="selectModel(item)" ng-repeat="item in filteredModelList">
+                            <div>
+                                <span> {{item.name}} </span>
+                            </div>
+                        </div>
+
+                        @*@foreach (var modelvar in Model.ModelList)
+                            {
+                                <div class="brand-container" onclick="modelupdate('@modelvar')">
+                                    <div>
+                                        <span> @modelvar </span>
+                                    </div>
+                                </div>
+                            }*@
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="lb_year" class="lightbox" style="display: none;">
+            <div class="lightbox-content">
+                <span class="lightboxclose cursor" onclick="closebox('lb_year');">×</span>
+                <div id="lightbox_title" class="lightbox-title"> <h2>@Editable(x=>x.YearPopupTitle)</h2></div>
+                <div id="lightbox_contents" class="lightbox-inner-content">
+
+                    <div class="lb-form">
+                        <div class="input-container">
+                            <input ng-change="filterYear()" ng-model="formFilter.carYear" placeholder="@Model.YearSearchText" class="form-input" type="text">
+                        </div>
+                    </div>
+
+
+                    <div id="lb_years" class="lb-brands">
+                        <div class="brand-container years" ng-click="selectYearRange(item)" ng-repeat="item in yearRangeList" ng-if="yearRangeMode">
+                            <div ng-if="$index == 0">
+                                <span> {{item.fromYear}} ({{item.fromYear + motorCarConstants.thaiYearDiff}}) @Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name, "AndOnwards")  </span>
+                            </div>
+                            <div ng-if="$index > 0">
+                                <span> {{item.fromYear}} ({{item.fromYear + motorCarConstants.thaiYearDiff}}) - {{item.toYear}} ({{item.toYear + motorCarConstants.thaiYearDiff}}) </span>
+                            </div>
+                        </div>
+
+                        <div class="brand-container noborder" ng-click="showYearRangeView()" ng-if="!yearRangeMode && (!formFilter.carYear || formFilter.carYear=='')">
+                            <div>
+                                <span> &lt; @Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name, "Back") </span>
+                            </div>
+                        </div>
+                        <div class="brand-container" ng-click="selectYear(item)" ng-repeat="item in filteredYearList" ng-if="!yearRangeMode">
+                            <div><span> {{item}} ({{item + motorCarConstants.thaiYearDiff}})</span></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="lb_itype" class="lightbox" style="display: none;">
+            <div class="lightbox-content">
+                <span class="lightboxclose cursor" onclick="closebox('lb_itype');">×</span>
+                <div id="lightbox_title" class="lightbox-title"> <h2>@Model.InsurancePopupTitle</h2></div>
+                <div id="lightbox_contents" class="lightbox-inner-content">
+
+
+                    <div class="lb-brands">
+                        @*@foreach (var insuranceType in Model.InsuranceList)
+                            {
+                                <div class="brand-container" onclick="insurancetupdate('@insuranceType')">
+                                    <div><span> @insuranceType </span></div>
+                                </div>
+                            }*@
+
+                        <div class="brand-container" ng-click="selectInsuranceType('@Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name , "InsuranceType1")', '1')">
+                            <div><span>@Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name , "InsuranceType1") </span></div>
+                        </div>
+                        <div class="brand-container" ng-click="selectInsuranceType('@Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name, "InsuranceType2")', '2')">
+                            <div><span>@Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name, "InsuranceType2") </span></div>
+                        </div>
+                        <div class="brand-container" ng-click="selectInsuranceType('@Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name, "InsuranceType2plus")', '2_plus')">
+                            <div><span>@Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name, "InsuranceType2plus") </span></div>
+                        </div>
+                        <div class="brand-container" ng-click="selectInsuranceType('@Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name, "InsuranceType3")', '3')">
+                            <div><span>@Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name, "InsuranceType3") </span></div>
+                        </div>
+                        <div class="brand-container" ng-click="selectInsuranceType('@Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name, "InsuranceType3plus")', '3_plus')">
+                            <div><span>@Translate.TextByDomain(Constants.QuoteAndBuyDictionary_Name, "InsuranceType3plus") </span></div>
+                        </div>
+                    </div>
+
+                    <div class="lb-textcontainer">
+                        @Html.Raw(Model.InsuranceDescription)
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+}
+
+        @*<script type="text/javascript">
+                var brands = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.BrandList));
+                var models =@Html.Raw(Json.Encode(Model.ModelList));
+                var yearrange = [["2010 and ownards", 1], ["2000 - 2010", 2], ["1990 - 2000", 3], ["1980 - 1990", 4]];
+                var years = ["2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001", "2000", "1999", "1998", "1997", "1996", "1995", "1994", "1993", "1992"];
+                var filtering;
+                var filteredarray = [];
+
+                document.getElementById("lb_brands").innerHTML = "";
+                for (i = 0; i < (brands.length) ; i++) {
+                    document.getElementById("lb_brands").innerHTML += '<div class="brand-container" onclick="brandupdate(\'' + brands[i] + '\')"><div><img width="100px" src="./img/carlogos/' + brands[i] + '.png"></div><div><span> ' + brands[i] + ' </span></div></div>';
+                }
+
+                document.getElementById("lb_years").innerHTML = "";
+                for (i = 0; i < (yearrange.length) ; i++) {
+                    document.getElementById("lb_years").innerHTML += '<div class="brand-container" onclick="yearrangeupdate(\'' + yearrange[i][1] + '\')"><div><span> ' + yearrange[i][0] + ' </span></div></div>';
+                }
+
+
+
+                document.getElementById("lb_models").innerHTML = "";
+                for (i = 0; i < (models.length) ; i++) {
+                    document.getElementById("lb_models").innerHTML += '<div class="brand-container" onclick="modelupdate(\'' + models[i] + '\')"><div><span> ' + models[i] + ' </span></div></div>';
+                }
+
+
+                function brandupdate(text) {
+                    document.getElementById("is_Brand").value = text;
+                    closebox("lb_brand")
+                }
+
+                function modelupdate(text) {
+                    document.getElementById("is_Model").value = text;
+                    closebox("lb_model")
+                }
+
+                function yearupdate(text) {
+                    document.getElementById("is_Year").value = text;
+                    closebox("lb_year")
+                }
+
+
+                function yearrangeupdate(sno) {
+
+
+                    document.getElementById("lb_years").innerHTML = "";
+
+                    if (sno == 1) {
+
+                        for (i = 2017; i >= 2010; i--) {
+                            document.getElementById("lb_years").innerHTML += '<div class="brand-container" onclick="yearupdate(\'' + i + '\')"><div><span> ' + i + ' </span></div></div>';
+                        }
+
+                    }
+
+                    if (sno == 2) {
+
+                        for (i = 2010; i >= 2000; i--) {
+                            document.getElementById("lb_years").innerHTML += '<div class="brand-container" onclick="yearupdate(\'' + i + '\')"><div><span> ' + i + ' </span></div></div>';
+                        }
+
+                    }
+                    if (sno == 3) {
+
+                        for (i = 2000; i >= 1990; i--) {
+                            document.getElementById("lb_years").innerHTML += '<div class="brand-container" onclick="yearupdate(\'' + i + '\')"><div><span> ' + i + ' </span></div></div>';
+                        }
+
+                    }
+                    if (sno == 4) {
+
+                        for (i = 1990; i >= 1980; i--) {
+                            document.getElementById("lb_years").innerHTML += '<div class="brand-container" onclick="yearupdate(\'' + i + '\')"><div><span> ' + i + ' </span></div></div>';
+                        }
+
+                    }
+
+
+                }
+
+
+                function opencallmeback() {
+                }
+
+                function insurancetupdate(text) {
+                    document.getElementById("is_InsuranceT").value = text;
+                    closebox("lb_itype")
+                }
+
+
+
+                function checkitems(myitem) {
+                    return myitem.toUpperCase().indexOf(filtering.toUpperCase()) > -1;
+                }
+
+
+
+                function filterdown(value, selected_array, lbox) {
+
+                    filtering = value;
+                    filteredarray = selected_array.filter(checkitems);
+                    rewritelb(lbox);
+                }
+
+
+                function rewritelb(lbox) {
+
+                    document.getElementById(lbox).innerHTML = "";
+                    for (i = 0; i < (filteredarray.length) ; i++) {
+
+                        if (lbox == "lb_brands") {
+                            document.getElementById(lbox).innerHTML += '<div class="brand-container" onclick="brandupdate(\'' + filteredarray[i] + '\')"><div><img width="100px" src="./img/carlogos/' + filteredarray[i] + '.png"></div><div><span> ' + filteredarray[i] + ' </span></div></div>';
+                        }
+
+                        if (lbox == "lb_models") {
+                            document.getElementById(lbox).innerHTML += '<div class="brand-container" onclick="modelupdate(\'' + filteredarray[i] + '\')"><div><span> ' + filteredarray[i] + ' </span></div></div>';
+                        }
+
+                        if (lbox == "lb_years") {
+                            document.getElementById(lbox).innerHTML += '<div class="brand-container" onclick="yearupdate(\'' + filteredarray[i] + '\')"><div><span> ' + filteredarray[i] + ' </span></div></div>';
+                        }
+
+
+                    }
+
+
+                }
+
+            </script>*@
+
+
+
+
+        @if (!Sitecore.Context.PageMode.IsExperienceEditor)
+        {
+            <script type="text/javascript">
+                var pageConfigData = @Html.Raw(ViewBag.PageConfigData);
+            </script>
+        }

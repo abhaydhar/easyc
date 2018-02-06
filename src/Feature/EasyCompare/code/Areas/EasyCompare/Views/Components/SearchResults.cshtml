@@ -1,0 +1,32 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.SearchModel>
+
+@if (Model != null)
+{
+    <div class="main-container">
+
+        <span class="article__title">@Editable(Model,x=>x.Title)@Model.searchTerm</span><br />
+       
+
+        @if (Model.articles != null && Model.articles.Any())
+        {
+            <div class="article__summary"> @Editable(Model, x => x.FoundText) </div>
+            foreach (var result in Model.articles)
+            {
+                <div class="searchresult" onclick="window.location.href='@result.Url'">
+                    <div class="searchresult_title"> @result.Title </div>
+                    <div class="searchresult_snippet">@result.SubTitle </div>
+                    <div class="searchresult_readmore"> Read more > </div>
+                </div>
+
+            }
+        }
+        else
+        {
+            <div class="article__summary"> @Editable(Model, x => x.NotFoundText) </div>
+        }
+
+
+    </div>
+}
+
+   

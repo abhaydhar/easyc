@@ -1,0 +1,15 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.IPageModel>
+<div class="header-navigation">
+    <h1 class="nav-heading">@Editable(x => x.PageTitle)</h1>
+</div>
+@if (Sitecore.Context.PageMode.IsExperienceEditor)
+{
+    @Editable(x => x.PageBody)
+}
+else
+{
+    if (!String.IsNullOrEmpty(Model.PageBody))
+    {
+        @Html.Raw(Model.PageBody);
+    }
+}

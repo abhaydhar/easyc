@@ -1,0 +1,59 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.ICountrySelector>
+@if (Model != null)
+{
+    var Query = HttpContext.Current.Request.Url.Query;
+    var currentUrl = Sitecore.Links.LinkManager.GetItemUrl(Sitecore.Context.Item) + Query;
+    int count = 0;
+    string separator = "|";
+    string activeFlgEn = "";
+    string activeFlgTh = "";
+    if (Sitecore.Context.Language.Name == "en")
+    {
+        activeFlgEn = "langactive";
+    }
+    else
+    {
+        activeFlgTh = "langactive";
+    }
+
+    foreach (var country in Model.Children)
+    {
+
+        if (Sitecore.Context.PageMode.IsExperienceEditorEditing)
+        {
+            <span class="langactive">@Editable(country, x => x.Title) </span>@separator
+            RenderLink(country, x => x.LinkUrl, isEditable: true);
+        }
+        else
+        {
+            if (count == 0)
+            {
+                if (country.LinkUrl != null)
+                {  <span onclick="window.location.href='@country.LinkUrl.Url@currentUrl'" class="@activeFlgEn">@Editable(country, x => x.Title) </span>@separator
+                }
+                else
+                {
+                    <span class="@activeFlgEn">@Editable(country, x => x.Title) </span>@separator
+
+                }
+
+            }
+            else
+            {
+                if (country.LinkUrl != null)
+                {
+                    @*<a href="@country.LinkUrl.Url">@Editable(country, x => x.Title)</a>*@
+                    <span class="@activeFlgTh"><a href="@country.LinkUrl.Url@currentUrl">@Editable(country, x => x.Title)</a></span>
+                }
+                else
+                {
+                    @Editable(country, x => x.Title)
+                }
+            }
+        }
+        count++;
+    }
+
+}
+
+

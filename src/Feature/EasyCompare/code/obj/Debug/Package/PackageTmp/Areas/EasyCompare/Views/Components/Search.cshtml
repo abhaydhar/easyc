@@ -1,0 +1,26 @@
+﻿@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@using Sitecore.Foundation.SitecoreExtensions.Extensions;
+@{
+    var siteRoot = Sitecore.Context.Database.GetItem(Sitecore.Context.Site.ContentStartPath);
+    Sitecore.Data.Database context = Sitecore.Context.Database;
+    var searchPage = context.GetItem(siteRoot.Fields["Search Page Url"].Value).Url();
+}
+<img onclick="show('lb_search')" width="25" src="~/assets/easycompare/img/msearch_w.png">
+
+<div id="lb_search" class="lightbox">
+    <div class="lightbox-content">
+        <span class="lightboxclose cursor" onclick="closebox('lb_search');">&times;</span>
+        <div id="lightbox_title" class="lightbox-title"> <h2>@Translate.TextByDomain(Constants.SearchDomain, "search-label")</h2></div>
+        <div id="lightbox_contents" class="lightbox-inner-content">
+            <div class="lb-form">
+                <div class="search_input-container">
+                    <input placeholder="@Translate.TextByDomain(Constants.SearchDomain, "Type here")" id="searchTerm" class="form-input-search" type="text" />
+                </div>
+                <div class="search_input-container">
+                    <button class="button-search" data-searchresultspage="@searchPage">@Translate.TextByDomain(Constants.SearchDomain, "search")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

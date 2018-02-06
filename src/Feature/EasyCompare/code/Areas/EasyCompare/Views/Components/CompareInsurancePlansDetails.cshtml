@@ -1,0 +1,310 @@
+﻿@using Sitecore.Globalization
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+<div class="fixed-compare-bar centered-content">
+    <div class="cp-row-d yc">
+        <div class="fixed-your-car-container" id="your-car-fixed">
+            {{quote.asset.carMake}}, {{quote.asset.carModel}}, {{quote.asset.carYear}} ({{quote.asset.carYear + motorCarConstants.thaiYearDiff}}), {{quote.asset.carClass}} <br><br><a href="#" class="car-change" ng-click="editCarDetail($event)">&lt; @Translate.TextByDomain(Constants.PolicyListDomain, "Change") </a>
+        </div>
+    </div>
+    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+        <div class="compare-package-item">
+            <div class="compare-package-item-close" ng-if="quote.plans.length > 2" ng-click="removeItem(item, $event)"></div>
+            <span class="insurer-name">
+                {{item.iName}}
+            </span>
+            <span class="insurer-type">
+                <span ng-if="item.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryAndCompulsory")</span>
+                <span ng-if="!item.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryOnly")</span>
+            </span>
+            <span class="insurer-type">
+                {{quote.asset.carClass}}
+            </span>
+            <span class="insurer-premium">{{item.premium | Amount }}</span>
+            <span ng-click="buyPolicy(item, $event)" class="compare-buy-now-btn">@Translate.TextByDomain(Constants.CompareInsurancePlansDetails, "BuyNow")</span>
+        </div>
+    </div>
+    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+        <div class="compare-package-item"><div ng-click="addMoreItem($event)" class="compare-package-item add-package"></div>       </div>
+    </div>
+</div>
+<div class="compare-scrolling-content">
+    <div class="cp-row-dm" ng-show="hasPromotion">@Translate.TextByDomain(Constants.CompareInsurancePlansDetails, "Promotions")</div>
+    <div class="cp-container" ng-show="hasPromotion">
+        <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlansDetails, "Promotions")</span></div></div>
+        <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+            <div class="compare-promo-item">
+                <span ng-if="item.hasDis">@Translate.TextByDomain(Constants.CompareInsurancePlansDetails, "Additional") {{item.disPerc}} @Translate.TextByDomain(Constants.CompareInsurancePlansDetails, "Discount")</span>
+            </div>
+        </div>
+        <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+            <div class="compare-promo-item"></div>
+        </div>
+    </div>
+
+    <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlansDetails, "SumInsured")</div>
+    <div class="cp-container-suminsured">
+        <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlansDetails, "SumInsured")</span></div></div>
+
+        <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+            <div class="compare-item-suminsured">
+                <span>{{item.sumInsured | SumInsured}}</span>
+            </div>
+        </div>
+        <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+            <div class="compare-item-suminsured"></div>
+        </div>
+    </div>
+
+
+    <div class="ag-accordion">
+        <div class="ag-accordion-header">
+            @Translate.TextByDomain(Constants.CompareInsurancePlansDetails, "GeneralInformation")
+        </div>
+        <div class="ag-accordion-body">
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "NetworkGarageDealer")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "NetworkGarageDealer")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span ng-if="!item.isAuthorisedGarage">@Translate.TextByDomain(Constants.CompareInsurancePlans, "NetworkGarage")</span>
+                            <span ng-if="item.isAuthorisedGarage">@Translate.TextByDomain(Constants.CompareInsurancePlans, "DealerGarge")</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "SpecificDriver")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "SpecificDriver")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span ng-if="item.sDriver">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Yes")</span>
+                            <span ng-if="!item.sDriver">@Translate.TextByDomain(Constants.CompareInsurancePlans, "No")</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "RoadsideAssistance")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "RoadsideAssistance")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span ng-if="item.rAssistance">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Yes")</span>
+                            <span ng-if="!item.rAssistance">@Translate.TextByDomain(Constants.CompareInsurancePlans, "No")</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-row accordion-row hiddenchat">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "MARS")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "MARS")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span ng-if="item.aResponse">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Yes")</span>
+                            <span ng-if="!item.aResponse">@Translate.TextByDomain(Constants.CompareInsurancePlans, "No")</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Deductible")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "Deductible")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span>{{item.odDeduct | SumInsured}}</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ag-accordion">
+        <div class="ag-accordion-header">
+            @Translate.TextByDomain(Constants.CompareInsurancePlansDetails, "OwnDamage")
+        </div>
+        <div class="ag-accordion-body">
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "SumInsured")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "SumInsured")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span>{{item.odSI | SumInsured}}</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "FireAndTheft")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "FireAndTheft")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span>{{item.odFT | SumInsured}}</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Flood")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "Flood")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span>{{item.odFlood | SumInsured}}</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ag-accordion">
+        <div class="ag-accordion-header">
+            @Translate.TextByDomain(Constants.CompareInsurancePlansDetails, "ThirdPartyLiability")
+        </div>
+        <div class="ag-accordion-body">
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "BodilyInjuryPerson")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "BodilyInjuryPerson")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span>{{item.tpPerson | SumInsured}}</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "BodilyInjuryAccident")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "BodilyInjuryAccident")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span>{{item.tpAccident | SumInsured}}</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "PropertyCoverage")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "PropertyCoverage")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span>{{item.tpPDamage | SumInsured}}</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ag-accordion">
+        <div class="ag-accordion-header">
+            @Translate.TextByDomain(Constants.CompareInsurancePlans, "OptionalCoversAddOns")
+        </div>
+        <div class="ag-accordion-body">
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "PersonalAccident")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "PersonalAccident")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span>{{item.acPA | SumInsured}}</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "MedicalExpenses")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "MedicalExpenses")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span>{{item.acME | SumInsured}}</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "NoOfDriversCovered")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "NoOfDriversCovered")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span>{{item.acNoOfDriver | SumInsured}}</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-row accordion-row">
+                <div class="cp-row-dm">@Translate.TextByDomain(Constants.CompareInsurancePlans, "BailBond")</div>
+                <div class="cp-container">
+                    <div class="cp-row-d"><div class="compare-title-left"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "BailBond")</span></div></div>
+                    <div class="cp-row-{{$index+1}}" ng-repeat="item in quote.plans">
+                        <div class="compare-item">
+                            <span>{{item.acBB | SumInsured}}</span>
+                        </div>
+                    </div>
+                    <div class="cp-row-{{quote.plans.length+1}}" ng-if="quote.plans.length < motorCarConstants.maxNumOfPlansForCompare">
+                        <div class="compare-item"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@if (!Sitecore.Context.PageMode.IsExperienceEditor)
+{
+    <script type="text/javascript">
+        var pageConfigData = @Html.Raw(ViewBag.PageConfigData);
+    </script>
+}

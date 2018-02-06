@@ -1,0 +1,49 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.MultiList>
+
+@if (Model != null)
+{
+    if (Model.Children != null && Model.Children.Any())
+    {
+        foreach (var child in Model.Children)
+        {
+            if (child != null)
+            {
+                if (child.BgColor != null && child.BgColor.TagName.ToUpper() == "GREY")
+                {
+                    @:<div class="greybg">
+                }
+                if (!String.IsNullOrEmpty(child.Title))
+                {
+                    <span class="article__title">@Editable(child, x => x.Title)</span><br>
+                }
+                if (!String.IsNullOrEmpty(child.SubTitle))
+                {
+                    <div class="article__summary"> @Editable(child, x => x.SubTitle)</div>
+                }
+
+                <div class="article__text">
+                    @if (Sitecore.Context.PageMode.IsExperienceEditor)
+                    {
+                        @Editable(child, x => x.Body)
+                    }
+                    else
+                    {
+                        @Html.Raw(child.Body)
+                    }
+                </div>
+                if (child.BgColor != null && child.BgColor.TagName.ToUpper() == "GREY")
+                {
+                    @:</div>
+                }
+            }
+        }
+    }
+
+}
+else
+{
+    if (Sitecore.Context.PageMode.IsExperienceEditor)
+    {
+        @Html.Raw("Enter the Datasource");
+    }
+}

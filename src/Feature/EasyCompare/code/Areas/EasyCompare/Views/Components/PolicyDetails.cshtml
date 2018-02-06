@@ -1,0 +1,36 @@
+﻿@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@model Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.PolicyDetails
+@{ 
+    string arrow = "< ";
+}
+@Html.Partial("~/Areas/EasyCompare/Views/Components/CarDetails.cshtml", Model)
+<div class="your-car-container twocolumns">
+    <div class="your-insurance">
+        <div>
+            <span class="your-car-label">@Translate.TextByDomain(Constants.PolicyListDomain, "Insurer"): </span>
+            <span class="your-car-name">{{quote.plan.iName}} </span>
+        
+        
+            <span class="your-car-label">, </span>
+            <span class="your-car-name">
+                <span ng-if="quote.plan.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryAndCompulsory")</span>
+                <span ng-if="!quote.plan.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryOnly")</span>
+            </span>
+        </div>
+        <div>
+            <span class="your-car-label">@Translate.TextByDomain(Constants.PolicyListDomain, "Premium"): </span>
+            <span class="your-car-name">{{quote.plan.premium | Amount}} </span>
+        </div>
+
+        <div class="car-change" ng-click="changePlan($event)">@arrow@Translate.TextByDomain(Constants.PolicyListDomain, "Change")</div>
+    </div>
+</div>
+
+@if (!Sitecore.Context.PageMode.IsExperienceEditor)
+{
+    <script type="text/javascript">
+            var pageConfigData = @Html.Raw(ViewBag.PageConfigData);
+    </script>
+}
+

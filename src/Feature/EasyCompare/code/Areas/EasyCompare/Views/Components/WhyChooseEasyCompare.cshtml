@@ -1,0 +1,53 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.Modules.IWhyChooseEasyCompare>
+@if (Model != null)
+{
+    <div class="whyeasycompare">
+        <div class="generic_title">@Editable(x => x.MainTitle)</div>
+        <div class="wcec_two_columns">
+            <div class="wcec__item__details">
+                @if (Sitecore.Context.PageMode.IsExperienceEditorEditing)
+                {
+                    <div class="tile__item__thumbnail">
+                        @RenderImage(x => x.LeftImage, new { mw = 200, width = (string)null }, isEditable: true)
+                    </div>
+                }
+                else
+                {
+                    if (Model.LeftImage != null)
+                    {
+                        <div class="tile__item__thumbnail" style="background-image: url('@Model.LeftImage.Src')"></div>
+                    }
+                    else
+                    {
+                        <div class="tile__item__thumbnail" style="background-image: url('')"></div>
+                    }
+                }
+                <div class="generic_subtitle">@Editable(x => x.LeftBottomTitle)</div>
+                <div class="wcec__item__snippet">@Editable(x => x.LeftBottomSubTitle)</div>
+            </div>
+        </div>
+        <div class="wcec_two_columns">
+            @if (Sitecore.Context.PageMode.IsExperienceEditorEditing)
+            {
+                <div class="tile__item__thumbnail">
+                    @RenderImage(x => x.RightImage, new { mw = 200, width = (string)null }, isEditable: true)
+                </div>
+            }
+            else
+            {
+                if (Model.LeftImage != null)
+                {
+                    <div class="tile__item__thumbnail" style="background-image: url('@Model.RightImage.Src')"></div>
+                }
+                else
+                {
+                    <div class="tile__item__thumbnail" style="background-image: url('')"></div>
+                }
+            }
+            <div class="generic_subtitle">@Editable(x => x.RightBottomTitle)</div>
+            <div class="wcec__item__snippet">@Editable(x => x.RightBottomSubTitle)</div>
+        </div>
+    </div>
+}
+
+

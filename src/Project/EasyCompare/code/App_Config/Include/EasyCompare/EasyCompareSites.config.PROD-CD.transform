@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- For more information on using transformations 
+     see the web.config examples at http://go.microsoft.com/fwlink/?LinkId=214134. -->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/" xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <sitecore>
+    <!--<settings xdt:Transform="InsertIfMissing">
+            <setting xdt:Transform="InsertIfMissing" xdt:Locator="Match(name)" name="Analytics.ForwardedRequestHttpHeader" value="X-Forwarded-For" />
+        </settings>-->
+    <sites>
+      <site xdt:Transform="Replace" xdt:Locator="Match(name)" name="EasyCompare" patch:after="site[@name='modules_website']" 
+            hostName="100.66.31.10|www.easycompare.co.th|66.198.169.76|easycompare.co.th"
+            targetHostName="www.easycompare.co.th" database="web" virtualFolder="/" physicalFolder="/" rootPath="/sitecore/content/easycompare" 
+            startItem="/Home" language="th-TH" notFoundItem="/404" dictionaryPath="/sitecore/content/easycompare/global/dictionary" domain="extranet" allowDebug="true"
+            cacheHtml="true" htmlCacheSize="50MB" registryCacheSize="0" viewStateCacheSize="0" xslCacheSize="25MB" filteredItemsCacheSize="10MB" 
+            enablePreview="true" enableWebEdit="true" enableDebugger="true" disableClientData="false" cacheRenderingParameters="true" 
+            renderingParametersCacheSize="10MB" mvcArea="easycompare" disableBrowserCaching="true" />
+    </sites>
+    <!--<tracking xdt:Transform="InsertIfMissing">
+            <sharedSessionState defaultProvider="InProc">
+                <patch:delete />
+            </sharedSessionState>
+            <sharedSessionState defaultProvider="mssql" xdt:Transform="InsertIfMissing">
+                <providers>
+                    <clear/>
+                    <add name="mssql" type="Sitecore.SessionProvider.Sql.SqlSessionStateProvider,Sitecore.SessionProvider.Sql" connectionStringName="sharedsession" pollingInterval="2" compression="true" sessionType="shared" />
+                </providers>
+
+                <manager type="Sitecore.Analytics.Tracking.SharedSessionState.SharedSessionStateManager, Sitecore.Analytics">
+                    <param desc="configuration" ref="tracking/sharedSessionState/config" />
+                </manager>
+
+                <config type="Sitecore.Analytics.Tracking.SharedSessionState.SharedSessionStateConfig, Sitecore.Analytics">
+                    <param desc="maxLockAge">5000</param>
+                    -->
+    <!-- If an item in session state is already locked, this parameter is the time in milliseconds that the system is idle before making another attempt to apply a lock. -->
+    <!--
+                    <param desc="timeoutBetweenLockAttempts">10</param>
+                </config>
+            </sharedSessionState>
+        </tracking>-->
+  </sitecore>
+</configuration>

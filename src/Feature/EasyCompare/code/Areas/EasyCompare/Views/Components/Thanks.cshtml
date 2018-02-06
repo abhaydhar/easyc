@@ -1,0 +1,16 @@
+﻿@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@model Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.ContactDetails
+<div class="main-container">
+    <span class="policyform__title">@Html.Raw(Translate.TextByDomain(Constants.ThanksDomain, "Thank you Header"))</span><br />
+    <span class="policyform__text">@Html.Raw(Translate.TextByDomain(Constants.ThanksDomain, "Thank you Message"))</span>
+
+
+</div>
+
+@if (!Sitecore.Context.PageMode.IsExperienceEditor)
+{
+    <script type="text/javascript">
+            var pageConfigData = @Html.Raw(ViewBag.PageConfigData);
+    </script>
+}

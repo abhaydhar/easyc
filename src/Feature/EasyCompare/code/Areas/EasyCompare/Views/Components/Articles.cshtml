@@ -1,0 +1,42 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.IArticleModel>
+
+@if (Model != null)
+{
+    <div class="main-container">
+        <span class="article__title">@Editable(Model, x => x.Title)</span><br />
+        <div class="article__summary">@Editable(Model, x => x.SubTitle)</div>
+        @if (Sitecore.Context.PageMode.IsExperienceEditor)
+        {
+            RenderImage(x => x.ArticleImage, isEditable: true);
+        }
+        else
+        {
+            if (Model.ArticleImage != null)
+            {
+                <div class="article__image" style="background-image: url('@Model.ArticleImage.Src')"></div>
+            }
+        }
+
+        <div class="article__text_2c">
+            @Editable(Model, x => x.Body)
+
+        </div>
+        @if (Model.ArticleDate != null)
+        {
+            <div class="article__date">
+
+                @{System.Globalization.CultureInfo provider = System.Globalization.CultureInfo.InvariantCulture;
+                }
+                @Sitecore.DateUtil.FormatDateTime(Model.ArticleDate, "dd MMM yyyy", provider)
+            </div>
+
+         }
+    </div>
+    }
+    else
+    {
+         if (Sitecore.Context.PageMode.IsExperienceEditor)
+         {
+               @Html.Raw("Enter the Datasource");
+         }
+    }

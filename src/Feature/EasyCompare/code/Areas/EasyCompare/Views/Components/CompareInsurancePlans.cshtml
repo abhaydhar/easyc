@@ -1,0 +1,223 @@
+﻿﻿@using Sitecore.Globalization
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+
+
+<div id="cardselectionmobile" class="cardselectionmobile">
+    <center>
+        <span class="cardsselectiontitle" ng-click="showCompareSection_M($event)" id="cardsselectiontitle">
+            <span ng-if="selectedItems.length == 0 ">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Select2PlanstoCompare")</span>
+            <span ng-if="selectedItems.length == 1 ">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Select1MoretoCompare")</span>
+            <span ng-if="selectedItems.length >= 2 ">@Translate.TextByDomain(Constants.CompareInsurancePlans, "CompareSelected")</span>
+        </span>
+        <img id="marrow" src="/assets/EasyCompare/img/home/u118.png" ng-click="showCompareSection_M($event)">
+
+        <div id="mcard_selection_{{$index}}f" class="mcards_selected" style="display:block" ng-repeat="item in selectedItems">
+            <div id="mcs_cn_{{$index}}" class="cs_company-name">
+                {{item.iName}}
+            </div>
+            <div id="mcs_it_{{$index}}" class="cs_insurance-type">
+                <span ng-if="item.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryAndCompulsory")</span>
+                <span ng-if="!item.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryOnly")</span>
+            </div>
+            <div id="mcs_itc_{{$index}}" class="cs_insurance-type">
+                {{quote.asset.carClass}}
+            </div>
+            <div id="mcs_p_{{$index}}" class="cs_price">{{item.premium | Amount}}</div>
+        </div>
+
+        <div id="mcard_selection_1" class="mcards_empty" ng-if="selectedItems.length<1"> <span class="add_card_plus">+</span></div>
+        <div id="mcard_selection_2" class="mcards_empty" ng-if="selectedItems.length<2"> <span class="add_card_plus">+</span></div>
+        @*<div id="mcard_selection_3" class="mcards_empty" ng-if="selectedItems.length<3"> <span class="add_card_plus">+</span></div>
+            <div id="mcard_selection_4" class="mcards_empty" ng-if="selectedItems.length<4"> <span class="add_card_plus">+</span></div>*@
+        <div>   
+            <a ng-click="comparePlan($event)" class="mbutton button--primary" ng-disabled="selectedItems.length < 2">
+                @Translate.TextByDomain(Constants.CompareInsurancePlans, "CompareSelected")
+            </a>
+        </div>
+    </center>
+
+</div>
+<div class="cardselection" id="cardselection">
+    <div id="cs_hide" class="cs_hide">
+
+        <div>
+            <h1>@Translate.TextByDomain(Constants.CompareInsurancePlans, "CompareInsurancePlans")</h1>
+            <h2>@Translate.TextByDomain(Constants.CompareInsurancePlans, "SelectUpto4Plans")</h2>
+        </div>
+        <div class="card-holder">
+
+            <div id="card_selection_{{$index}}f" class="cards_selected" style="display:block" ng-repeat="item in selectedItems">
+                <div class="cs_remove"><img id="cs_close_{{$index}}" ng-click="removeItem(item, $event)" src="/assets/EasyCompare/img/remove_btn.png" width="20px"></div>
+                <div id="cs_cn_{{$index}}" class="cs_company-name">
+                    {{item.iName}}
+                </div>
+                <div id="cs_it_{{$index}}" class="cs_insurance-type">
+                    <span ng-if="item.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryAndCompulsory")</span>
+                    <span ng-if="!item.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryOnly")</span>
+                </div>
+                <div id="cs_itc_{{$index}}" class="cs_insurance-type">
+                    {{quote.asset.carClass}}
+                </div>
+                <div id="cs_p_{{$index}}" class="cs_price">{{item.premium | Amount}}</div>
+            </div>
+
+            <div id="card_selection_1" class="cards_empty" ng-if="selectedItems.length<1"> <span class="add_card_plus">+</span></div>
+            <div id="card_selection_2" class="cards_empty" ng-if="selectedItems.length<2"> <span class="add_card_plus">+</span></div>
+            <div id="card_selection_3" class="cards_empty" ng-if="selectedItems.length<3"> <span class="add_card_plus">+</span></div>
+            <div id="card_selection_4" class="cards_empty" ng-if="selectedItems.length<4"> <span class="add_card_plus">+</span></div>
+        </div>
+        <div>
+            <a ng-click="comparePlan($event)" class="button button--primary" ng-disabled="selectedItems.length < 2">
+                @Translate.TextByDomain(Constants.CompareInsurancePlans, "CompareSelected")
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="lb_details" class="lightbox">
+    <div class="lightbox-content">
+        <span class="lightboxclose cursor" onclick="closebox('lb_details');">&times;</span>
+        <div id="lightbox_title" class="lightbox-title"> <h2>@Translate.TextByDomain(Constants.CompareInsurancePlans, "Details")</h2></div>
+
+        <div id="lightbox_contents" class="lightbox-inner-content-details">
+            <div class="lb-details-c1">
+                <div class="package__details">
+                    <div class="lb-package">
+                        <div class="company-title" back-img="{{viewItem.iLogo}}">
+                            <div class="company-name">
+                                {{viewItem.iName}}
+                            </div>
+                            <div class="insurance-type">
+                                <span ng-if="viewItem.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryAndCompulsory")</span>
+                                <span ng-if="!viewItem.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryOnly")</span>
+                            </div>
+                            <div class="insurance-type">
+                                {{quote.asset.carClass}}
+                            </div>
+                        </div>
+                        <div class="discount-container" ng-if="viewItem.hasDis">
+                            <div class="d-item discount-type">@Translate.TextByDomain(Constants.CompareInsurancePlans, "DiscountedPremium") <br /><span class="d-value">{{viewItem.premium | Amount}}</span></div>
+                        </div>
+                        <div class="discount-container" ng-if="!viewItem.hasDis">
+                            <div class="d-item discount-type">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Premium") <br /><span class="d-value">{{viewItem.premium | Amount}}</span></div>
+                        </div>
+                        <div class="additional-discount" ng-if="viewItem.hasDis">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Additional") <b>{{viewItem.disPerc}}</b> @Translate.TextByDomain(Constants.CompareInsurancePlans, "OffTill") {{viewItem.disExpDt | ShortDate}}</div>
+
+                        <div class="d-item detail-row suminsured">
+                            <span class="left-detail">@Translate.TextByDomain(Constants.CompareInsurancePlans, "SumInsured")</span>
+                            <span class="right-detail">{{viewItem.sumInsured | SumInsured}}</span>
+                        </div>
+
+                        <div class="action-btn-container">
+                        </div>
+                        <div class="package-btns">
+                            <span ng-if="!viewItem.selected" class="compare-button" ng-click="selectItem(viewItem, $event)">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Compare")</span>
+                            <span ng-if="viewItem.selected == true" class="remove-button" ng-click="removeItem(viewItem, $event)">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Remove")</span>
+                            <span ng-click="buyPolicy(viewItem, $event)" class="buy-button">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Buy")</span>
+                        </div>
+                        <div class="remark-legal">
+                            @Translate.TextByDomain(Constants.CompareInsurancePlans, "RemarkLegal")
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lb-details-c2">
+                <div class="package__details">
+                    <div class="lb-package">
+                        <div class="detail_maintitle"> @Translate.TextByDomain(Constants.CompareInsurancePlans, "GeneralInformation")</div>
+                        <div class="row-even">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "NetworkGarageDealer")</div>
+                            <div class="detail_item">
+                                <span ng-if="!viewItem.isAuthorisedGarage">@Translate.TextByDomain(Constants.CompareInsurancePlans, "NetworkGarage")</span>
+                                <span ng-if="viewItem.isAuthorisedGarage">@Translate.TextByDomain(Constants.CompareInsurancePlans, "DealerGarge")</span>
+                            </div>
+                        </div>
+                        <div class="row-odd">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "SpecificDriver")</div>
+                            <div class="detail_item">
+                                <span ng-if="viewItem.sDriver">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Yes")</span>
+                                <span ng-if="!viewItem.sDriver">@Translate.TextByDomain(Constants.CompareInsurancePlans, "No")</span>
+                            </div>
+                        </div>
+                        <div class="row-even">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "RoadsideAssistance")</div>
+                            <div class="detail_item">
+                                <span ng-if="viewItem.rAssistance">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Yes")</span>
+                                <span ng-if="!viewItem.rAssistance">@Translate.TextByDomain(Constants.CompareInsurancePlans, "No")</span>
+                            </div>
+                        </div>
+                        <div class="row-odd hiddenchat">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "MARS")</div>
+                            <div class="detail_item">
+                                <span ng-if="viewItem.aResponse">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Yes")</span>
+                                <span ng-if="!viewItem.aResponse">@Translate.TextByDomain(Constants.CompareInsurancePlans, "No")</span>
+                            </div>
+                        </div>
+                        <div class="row-odd">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Deductible")</div>
+                            <div class="detail_item">{{viewItem.odDeduct | SumInsured}}</div>
+                        </div>
+
+                        <div class="detail_maintitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "OwnDamage")</div>
+                        <div class="row-odd">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "SumInsured")</div>
+                            <div class="detail_item">{{viewItem.odSI | SumInsured}}</div>
+                        </div>
+                        <div class="row-even">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "FireAndTheft")</div>
+                            <div class="detail_item">{{viewItem.odFT | SumInsured}}</div>
+                        </div>
+                        <div class="row-odd">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Flood")</div>
+                            <div class="detail_item">{{viewItem.odFlood | SumInsured}}</div>
+                        </div>
+
+                        <div class="detail_maintitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "ThirdPartyLiability")</div>
+
+                        <div class="row-even">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "BodilyInjuryPerson")</div>
+                            <div class="detail_item">{{viewItem.tpPerson | SumInsured}}</div>
+                        </div>
+
+                        <div class="row-odd">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "BodilyInjuryAccident")</div>
+                            <div class="detail_item">{{viewItem.tpAccident | SumInsured}}</div>
+                        </div>
+
+                        <div class="row-even">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "PropertyCoverage")</div>
+                            <div class="detail_item">{{viewItem.tpPDamage | SumInsured}}</div>
+                        </div>
+
+                        <div class="detail_maintitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "OptionalCoversAddOns")</div>
+
+                        <div class="row-even">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "PersonalAccident")</div>
+                            <div class="detail_item">{{viewItem.acPA | SumInsured}}</div>
+                        </div>
+
+                        <div class="row-odd">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "MedicalExpenses")</div>
+                            <div class="detail_item">{{viewItem.acME | SumInsured}}</div>
+                        </div>
+
+                        <div class="row-even">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "NoOfDriversCovered")</div>
+                            <div class="detail_item">{{viewItem.acNoOfDriver | number:0}}</div>
+                        </div>
+
+                        <div class="row-odd">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "BailBond")</div>
+                            <div class="detail_item">{{viewItem.acBB | SumInsured}}</div>
+                        </div>
+
+                        <div class="row-even hiddenchat">
+                            <div class="detail_itemtitle">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Wayside")</div>
+                            <div class="detail_item">{{viewItem.acWayside | SumInsured}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

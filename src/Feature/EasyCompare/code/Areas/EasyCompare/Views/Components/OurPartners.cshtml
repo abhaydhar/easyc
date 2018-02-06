@@ -1,0 +1,33 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.Modules.IOurPartners>
+@if (Model != null)
+{
+    <div class="ourpartners"> @*onclick="window.location.href = '/ourpartners'"*@
+        <div class="generic_title">@Editable(x => x.Title)</div>
+        <div class="generic_snippet">@Editable(x => x.SubTitle)</div>
+        <div class="six_insurers">
+            @if (Model.PartnerLinks != null && Model.PartnerLinks.Count() > 0)
+            {
+                foreach (var u in Model.PartnerLinks)
+                {
+                    if (u.LinkImage != null)
+                    {
+                        if (Sitecore.Context.PageMode.IsExperienceEditor)
+                        {
+                            <div class=op_insurer>
+                                @RenderImage(u, x => x.LinkImage, new { mw = 140, width = (string)null }, isEditable: true);
+                            </div>
+                        }
+                        else
+                        {
+                            <div class=op_insurer>
+                                <div class="op_insurer_logo" style="background-image: url('@u.LinkImage.Src'); background-size: 100%;"></div>
+                            </div>
+                        }
+                    }
+                }
+            }
+        </div>
+    </div>
+}
+
+

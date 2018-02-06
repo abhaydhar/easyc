@@ -1,0 +1,96 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.IHeaderModel>
+@using Sitecore.Mvc;
+@if (Model != null)
+{
+    if (Model.IsFixedHeader)
+    {
+        <div class="fixed-compare-branding">
+            @if (Sitecore.Context.PageMode.IsExperienceEditor)
+            {
+                using (BeginRenderLink(x => x.HeaderLink, isEditable: true))
+                {
+                    @RenderImage(x => x.HeaderLogo, new { mw = 180, width = (string)null }, isEditable: true)
+                }
+
+            }
+            else
+            {
+                if (Model.HeaderLogo != null)
+                {
+                    if (Model.HeaderLink != null)
+                    {
+                        <a href="@Model.HeaderLink.Url">
+                            <img src="@Model.HeaderLogo.Src" class="fixed-logo-img">
+                        </a>
+                    }
+                    else
+                    {
+                        <img src="@Model.HeaderLogo.Src" class="fixed-logo-img" />
+                    }
+                }
+            }
+            @if (Model.QuickLink != null)
+            {
+                <nav class="quicklinks-compare">
+                    <div class="quicklinks-text-compare">
+                        @RenderLink(x => x.QuickLink, new System.Collections.Specialized.NameValueCollection { { "class", "quicklinks__item" } },
+                 isEditable: true)
+                    </div>
+                </nav>
+                @*<nav onclick="window.open('@Model.QuickLink.Url');" class="compare-phone"></nav>*@
+                <a href="@Model.QuickLink.Url"><nav class="compare-phone"></nav></a>
+            }
+
+        </div>
+    }
+    else
+    {
+        <div class="header_top">
+            <div class="header_top_left_icon">
+                @if (Sitecore.Context.PageMode.IsExperienceEditor)
+                {
+                    using (BeginRenderLink(x => x.HeaderLink, isEditable: true))
+                    {
+                        @RenderImage(x => x.HeaderLogo, new { mw = 150, width = (string)null }, isEditable: true);
+                    }
+
+                }
+                else
+                {
+                    if (Model.HeaderLogo != null)
+                    {
+                        if (Model.HeaderLink != null)
+                        {
+                            <img width="150" src="@Model.HeaderLogo.Src" onclick="window.location.href='@Model.HeaderLink.Url'">
+                        }
+                        else
+                        {
+                            <img width="150" src="@Model.HeaderLogo.Src" />
+                        }
+                    }
+                }
+
+            </div>
+            @if (Model.QuickLink != null)
+            {
+                <div class="header_top_right">
+
+                    @RenderLink(x => x.QuickLink, new System.Collections.Specialized.NameValueCollection { { "class", "phonelink" } },
+                 isEditable: true)
+
+                </div>
+                <div class="header_top_right_icon">
+                    <a class="phonelink" href="@Model.QuickLink.Url"> <img width="25" src="~/assets/easycompare/img/phone-gray.png"> </a>
+                </div>
+            }
+        </div>
+    }
+
+
+    <div class="header_bottom">
+        @Html.Sitecore().Placeholder("Navigation")
+    </div>
+}
+
+
+

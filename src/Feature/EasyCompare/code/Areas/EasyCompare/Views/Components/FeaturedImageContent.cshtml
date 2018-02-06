@@ -1,0 +1,112 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.FeaturedImageContent>
+@if (Model != null)
+{
+
+    <span class="article__title">@Editable(Model, x => x.Title)</span>
+    <div class="article__summary"> @Editable(Model, x => x.SubTitle)</div>
+    if (Model.ImageAlignment != null && Model.ImageCopy != null)
+    {
+        if (Model.ImageAlignment.TagName != null)
+        {
+            if (Model.ImageAlignment.TagName.ToUpper() == "FULL")
+            {
+                if (Sitecore.Context.PageMode.IsExperienceEditor)
+                {
+                    @RenderImage(Model, x => x.ImageCopy, new { mw = 140, width = (string)null }, isEditable: true);
+                }
+                else
+                {
+                    if (Model.ImageCopy != null)
+                    {
+                        <div class="article__image" style="background-image: url('@Model.ImageCopy.Src')"></div>
+                    }
+                }
+                <div class="article__text">
+                    @if (Sitecore.Context.PageMode.IsExperienceEditor)
+                    {
+                        @Editable(Model, x => x.Body)
+                    }
+                    else
+                    {
+                        @Html.Raw(Model.Body)
+                    }
+                </div>
+
+            }
+            else if (Model.ImageAlignment.TagName.ToUpper() == "LEFT")
+            {
+                if (Sitecore.Context.PageMode.IsExperienceEditor)
+                {
+                    @RenderImage(Model, x => x.ImageCopy, new { mw = 140, width = (string)null }, isEditable: true);
+                }
+                else
+                {
+                    if (Model.ImageCopy != null)
+                    {
+                        <div class="article__image half_page" style="background-image: url('@Model.ImageCopy.Src')"></div>
+                    }
+                }
+                <div class="article__text half_page">
+                    @if (Sitecore.Context.PageMode.IsExperienceEditor)
+                    {
+                        @Editable(Model, x => x.Body)
+                    }
+                    else
+                    {
+                        @Html.Raw(Model.Body)
+                    }
+                </div>
+
+            }
+            else if (Model.ImageAlignment.TagName.ToUpper() == "RIGHT")
+            {
+
+                <div class="article__text half_page">
+                    @if (Sitecore.Context.PageMode.IsExperienceEditor)
+                    {
+                        @Editable(Model, x => x.Body)
+                    }
+                    else
+                    {
+                        @Html.Raw(Model.Body)
+                    }
+                </div>
+                if (Sitecore.Context.PageMode.IsExperienceEditor)
+                {
+                    @RenderImage(Model, x => x.ImageCopy, new { mw = 140, width = (string)null }, isEditable: true);
+                }
+                else
+                {
+                    if (Model.ImageCopy != null)
+                    {
+                        <div class="article__image half_page" style="background-image: url('@Model.ImageCopy.Src')"></div>
+                    }
+                }
+
+            }
+
+        }
+    }
+    else
+    {
+        <div class="article__summary">
+            @if (Sitecore.Context.PageMode.IsExperienceEditor)
+            {
+                @Editable(Model, x => x.Body)
+            }
+            else
+            {
+                @Html.Raw(Model.Body)
+            }
+        </div>
+    }
+
+
+}
+else
+{
+    if (Sitecore.Context.PageMode.IsExperienceEditor)
+    {
+        @Html.Raw("Enter the Datasource");
+    }
+}

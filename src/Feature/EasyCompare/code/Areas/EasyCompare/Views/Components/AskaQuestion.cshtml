@@ -1,0 +1,95 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.BaseTitle>
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+
+@if (Model != null)
+{
+    <form action="@Url.Action("AskAQuestion", "Common")" method="post">
+        <div class="main-container">
+            <div class="greybg">
+                <span class="policyform__title">@Editable(Model, x => x.Title)</span>
+                <div class="article__summary"> @Editable(Model, x => x.SubTitle)</div>
+
+                <div class="p-input-form firstquestion fullwidth">
+                    <div class="form-input-label">@Translate.TextByDomain(Constants.AskQuestionDomain, "Name")</div>
+                    <div class="input-container fullwidth100">
+                        <input name="Name" id="aaq_name" placeholder="@Translate.TextByDomain(Constants.AskQuestionDomain, "Enter your Name")" class="form-input" type="text" />
+                    </div>
+                    @*<div class="input-container thirdwidth">
+                            <input placeholder="@Translate.TextByDomain(Constants.AskQuestionDomain, "Enter your Middle Name")" class="form-input" type="text" />
+                        </div>
+                        <div class="input-container thirdwidth">
+                            <input placeholder="@Translate.TextByDomain(Constants.AskQuestionDomain, "Enter your Last Name")" class="form-input" type="text" />
+                        </div>*@
+                </div>
+                <div class="p-input-form">
+                    <div class="form-input-label">@Translate.TextByDomain(Constants.AskQuestionDomain, "E-mail")</div>
+                    <div class="input-container fullwidth">
+                        <input id="aaq_email" name="EmailId" placeholder="@Translate.TextByDomain(Constants.AskQuestionDomain, "Enter your e-mail address")" class="form-input" type="text" />
+                    </div>
+                </div>
+                <div class="p-input-form">
+                    <div class="form-input-label">@Translate.TextByDomain(Constants.AskQuestionDomain, "Phone Number")</div>
+                    <div class="input-container fullwidth">
+                        <input id="aaq_phone" name="PhoneNumber" placeholder="@Translate.TextByDomain(Constants.AskQuestionDomain, "Enter your phone number")" class="form-input" type="text" />
+                    </div>
+                </div>
+                <div class="p-input-form">
+                    <div class="form-input-label">@Translate.TextByDomain(Constants.AskQuestionDomain, "Line ID")</div>
+                    <div class="input-container fullwidth">
+                        <input id="aaq_line" name="LineId" placeholder="@Translate.TextByDomain(Constants.AskQuestionDomain, "Enter your Line ID")" class="form-input" type="text" />
+                    </div>
+                </div>
+                <div class="p-input-form">
+                    <div class="form-input-label">@Translate.TextByDomain(Constants.AskQuestionDomain, "When we can call you")</div>
+                    <div class="input-container fullwidth">
+                        <select id="aaq_time" name="WhenWecanCall" placeholder="@Translate.TextByDomain(Constants.AskQuestionDomain, "When we can call you")" class="form-input">
+                            <option value="Morning">@Translate.TextByDomain(Constants.AskQuestionDomain, "Morning")</option>
+                            <option value="Afternoon">@Translate.TextByDomain(Constants.AskQuestionDomain, "Afternoon") </option>
+                            <option value="Evening">@Translate.TextByDomain(Constants.AskQuestionDomain, "Evening")</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="p-input-form fullwidth">
+                    <div class="form-input-label">@Translate.TextByDomain(Constants.AskQuestionDomain, "YourQuestion")</div>
+                    <div class="input-container fullwidth100">
+                        <input name="YourQuestion" id="aaq_question" placeholder="@Translate.TextByDomain(Constants.AskQuestionDomain, "EnterYourQuestion")" class="form-input" type="text">
+                    </div>
+                </div>
+
+                <div class="p-input-form">
+                    <input type="submit" onclick="return checkandgo();" class="button-submit" value="@Translate.TextByDomain(Constants.AskQuestionDomain, "Apply Now")">
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <div id="lbalert" class="lightbox">
+        <div class="lightbox-content">
+            <span class="lightboxclose cursor" onclick="closebox('lbalert');">&times;</span>
+            <div class="lightbox-title"> <h2 id="lbalert_title">Lightbox Title</h2></div>
+            <div id="lbalert_contents" class="lightbox-inner-content"> Inner Content</div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    function checkandgo() {     
+        if (document.getElementById("aaq_name").value == "") {
+            document.getElementById("aaq_name").className += " inputerror";
+            lbalert("@Translate.TextByDomain(Constants.AskQuestionDomain, "Name")", "@Translate.TextByDomain(Constants.AskQuestionDomain, "Enter your Name")")
+            return false;
+        }
+        if (document.getElementById("aaq_question").value == ""){
+            document.getElementById("aaq_question").className += " inputerror";
+            lbalert("@Translate.TextByDomain(Constants.AskQuestionDomain, "Name")", "@Translate.TextByDomain(Constants.AskQuestionDomain, "EnterYourQuestion")")
+            return false;
+        }
+    }
+    function show(box) {
+        document.getElementById(box).style.display = "block";
+    }
+    function closebox(box) {
+        document.getElementById(box).style.display = "none";
+    }
+</script>

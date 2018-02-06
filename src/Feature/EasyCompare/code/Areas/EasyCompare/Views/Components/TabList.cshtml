@@ -1,0 +1,62 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.TabList>
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@using Sitecore.Mvc;
+
+@if (Model != null)
+{
+    <div class="main-container">
+        <div class="tile__links">
+            <div class="tile__row">
+                @if (Sitecore.Context.PageMode.IsExperienceEditor)
+                {
+                <div class="tile__link onwhite">@RenderLink(Model, x => x.Tabs.ToList()[0].LinkUrl, isEditable: true)</div>
+                <div class="tile__link onwhite">@RenderLink(Model, x => x.Tabs.ToList()[1].LinkUrl, isEditable: true)</div>
+                <div class="tile__link onwhite">@RenderLink(Model, x => x.Tabs.ToList()[2].LinkUrl, isEditable: true)</div>
+                }
+                else
+                {
+                    if (Model.Tabs.Any())
+                    {
+                        foreach (var tab in Model.Tabs)
+                        {
+                            if (Sitecore.Context.PageMode.IsExperienceEditor)
+                            {
+                                <div class="tile__link onwhite">@RenderLink(tab, x => x.LinkUrl, isEditable: true)</div>
+                            }
+                            else
+                            {
+                                if (tab.LinkUrl != null)
+                                {
+                                    if (tab.LinkUrl.Url == Model.currentPageUrl)
+                                    {
+                                        <div class="tile__link onwhite"><a id="al_all" class="active" href="@tab.LinkUrl.Url">@tab.LinkUrl.Text</a></div>
+                                    }
+                                    else
+                                    {
+                                    <div class="tile__link onwhite "><a id="al_all" href="@tab.LinkUrl.Url">@tab.LinkUrl.Text</a></div>
+                                        }
+                                    }
+                                }
+                            }
+
+
+                        }
+                    }
+                
+
+
+            </div>
+        </div>
+       
+        @Html.Sitecore().Placeholder("tabcontent")
+    </div>
+
+}
+else
+{
+    if (Sitecore.Context.PageMode.IsExperienceEditor)
+    {
+        @Html.Raw("Enter the Datasource");
+    }
+}

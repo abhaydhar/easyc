@@ -1,0 +1,57 @@
+﻿@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@{ 
+}
+<div class="main-container call-me-back-form"> 
+    <ng-form name="callMeBackForm">
+
+        <div class="p-input-form firstquestion fullwidth">
+            <div class="form-input-label">@Translate.TextByDomain(Constants.AskQuestionDomain, "Name")</div>
+            <div class="input-container fullwidth">
+                <input class="form-input" type="text" ng-model="callback.name" ng-class="{'inputerror': callMeBackForm.FirstName.$invalid && callMeBackForm.FirstName.$dirty}" name="FirstName" required @*placeholder="@Translate.TextByDomain(Constants.CallMeBackDomain, "Name")"*@ />
+            </div>
+        </div>
+
+        <div class="p-input-form fullwidth">
+            <div class="form-input-label">@Translate.TextByDomain(Constants.AskQuestionDomain, "Phone Number")</div>
+            <div class="input-container fullwidth">
+                <input id="contact_method" type="text" class="form-input" ng-class="{'inputerror': callMeBackForm.Phone.$invalid && callMeBackForm.Phone.$dirty}" name="Phone" required @*placeholder="@Translate.TextByDomain(Constants.CallMeBackDomain, "enter-phone")"*@ ng-model="callback.optionVal" />
+            </div>
+        </div>
+
+        <div class="p-input-form fullwidth">
+            <div class="form-input-label">@Translate.TextByDomain(Constants.AskQuestionDomain, "Preferred Time")</div>
+            <div class="input-container fullwidth">
+                <select class="form-input" ng-model="callback.callBackTime" ng-class="{'inputerror': callMeBackForm.callBackTime.$invalid && callMeBackForm.callBackTime.$dirty}" name="callBackTime" required>
+                    <option value="@Constants.CallMeBackTimeOptions.Morning">@Translate.TextByDomain(Constants.ContactListDomain, "Morning")</option>
+                    <option value="@Constants.CallMeBackTimeOptions.Afternoon">@Translate.TextByDomain(Constants.ContactListDomain, "Afternoon")</option>
+                    <option value="@Constants.CallMeBackTimeOptions.Evening">@Translate.TextByDomain(Constants.ContactListDomain, "Evening")</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="p-input-form fullwidth">
+            <span ng-click="callMeBack(callMeBackForm, $event)" class="contact-btn name-label">
+                @Translate.TextByDomain(Constants.CallMeBackDomain, "Call-me-back-button")</span>
+        </div>
+
+        <div id="lbalert" class="lightbox">
+            <div class="lightbox-content">
+                <span class="lightboxclose cursor" onclick="closebox('lbalert');">&times;</span>
+                <div class="lightbox-title"> <h2 id="lbalert_title">Lightbox Title</h2></div>
+                <div id="lbalert_contents" class="lightbox-inner-content"> Inner Content</div>
+            </div>
+        </div>
+    </ng-form>
+</div>
+<!-- end of fixed bottom contact bar -->
+
+
+@if (!Sitecore.Context.PageMode.IsExperienceEditor)
+{
+    <script type="text/javascript">
+            var pageConfigData = @Html.Raw(ViewBag.PageConfigData);
+    </script>
+}
+
+

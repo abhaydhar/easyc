@@ -1,0 +1,31 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.Modules.ICompareCarInsurers>
+@if (Model != null)
+{
+    <div class="comparenow_banner">
+        <div class="generic_title">@Editable(x => x.Title)</div>
+        <div class="cb_twobuttons">
+            <div class="cb_button">
+                @if (Model.LetUsCallyouLink != null)
+                {
+                    <button onclick="location.href='@Model.LetUsCallyouLink.Url'" class="button-callme">@Editable(x => x.LetUsCallyouText)</button>
+                }
+                else
+                {
+                    <button onclick="" class="button-callme">@Editable(x => x.LetUsCallyouText)</button>
+                }
+
+            </div>
+            <div class="cb_button">
+                @if (Model.StartComparingLink != null)
+                {
+                    <button onclick="location.href = '@Model.StartComparingLink.Url'" class="button-comparenow">@Editable(x => x.StartComparingText)</button>
+                }
+                else
+                {
+                    <button onclick="" class="button-comparenow">@Editable(x => x.StartComparingText)</button>
+                }
+            </div>
+        </div>
+        <div class="generic_snippet">@Editable(x => x.BottomText)</div>
+    </div>
+}

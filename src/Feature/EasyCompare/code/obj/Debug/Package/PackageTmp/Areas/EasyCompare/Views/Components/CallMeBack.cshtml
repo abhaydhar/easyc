@@ -1,0 +1,70 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.CallMeBackModel>
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@{ 
+    var barclass = "bottom-contact-bar";
+    if(Model.isPageBar)
+    {
+        barclass = "bottom-contact-bar-page";
+    }
+}
+<!-- fixed bottom contact bar -->
+<div id="bottom-contact-bar" class="@barclass">
+    <ng-form name="callMeBackForm">
+        <div class="help-you-txt">@Translate.TextByDomain(Constants.CallMeBackDomain, "call-me-back-title")</div>
+        <div class="cb_ncontainer">
+            <div class="contact-item name-container">
+                <input class="name-input" ng-model="callback.name" ng-class="{'inputerror': callMeBackForm.FirstName.$invalid && callMeBackForm.FirstName.$dirty}" name="FirstName" required placeholder="@Translate.TextByDomain(Constants.CallMeBackDomain, "Name")" />
+            </div>
+        </div>
+        <div class="cb_ncontainer">
+            <div class="name-container">
+                <span id="phonebutton" ng-click="callback.option='@Constants.CallMeBackOptions.Phone'"  ng-class="{'filter_on': callback.option=='@Constants.CallMeBackOptions.Phone'}" class="phonebutton">  </span>
+                <span id="emailbutton" ng-click="callback.option='@Constants.CallMeBackOptions.Email'"  ng-class="{'filter_on': callback.option=='@Constants.CallMeBackOptions.Email'}" class="emailbutton"> </span>
+                <span id="linebutton" ng-click="callback.option='@Constants.CallMeBackOptions.Line'"  ng-class="{'filter_on': callback.option=='@Constants.CallMeBackOptions.Line'}" class="linebutton">  </span>
+                
+                <input id="contact_method" ng-if="callback.option=='@Constants.CallMeBackOptions.Phone'" class="contact-input" ng-class="{'inputerror': callMeBackForm.Phone.$invalid && callMeBackForm.Phone.$dirty}" name="Phone" required placeholder="@Translate.TextByDomain(Constants.CallMeBackDomain, "enter-phone")" ng-model="callback.optionVal" />
+                <input id="contact_method" ng-if="callback.option=='@Constants.CallMeBackOptions.Email'" class="contact-input" ng-class="{'inputerror': callMeBackForm.Email.$invalid && callMeBackForm.Email.$dirty}" name="Email" required placeholder="@Translate.TextByDomain(Constants.CallMeBackDomain, "enter-email")" ng-model="callback.optionVal"/>
+                <input id="contact_method" ng-if="callback.option=='@Constants.CallMeBackOptions.Line'" class="contact-input" ng-class="{'inputerror': callMeBackForm.Line.$invalid && callMeBackForm.Line.$dirty}" name="Line" required placeholder="@Translate.TextByDomain(Constants.CallMeBackDomain, "enter-line")" ng-model="callback.optionVal" />                
+            </div>
+        </div>
+        <div class="cb_ncontainer">
+            <div class="contact-item name-container">
+                <select class="name-input time-dropdown" ng-model="callback.callBackTime" ng-class="{'inputerror': callMeBackForm.callBackTime.$invalid && callMeBackForm.callBackTime.$dirty}" name="callBackTime" required>
+                <option selected value="">@Translate.TextByDomain(Constants.ContactListDomain, "SelectTheTime")</option>
+                    <option value="@Constants.CallMeBackTimeOptions.Morning">@Translate.TextByDomain(Constants.ContactListDomain, "Morning")</option>
+                    <option value="@Constants.CallMeBackTimeOptions.Afternoon">@Translate.TextByDomain(Constants.ContactListDomain, "Afternoon")</option>
+                    <option value="@Constants.CallMeBackTimeOptions.Evening">@Translate.TextByDomain(Constants.ContactListDomain, "Evening")</option>
+                </select>
+                <!--  <div class="dropdown-arrow"></div> -->
+            </div>
+        </div>
+
+        @*<div class="contact-item name-container">
+            <span class="name-label">@Translate.TextByDomain(Constants.CallMeBackDomain, "Time")</span>
+            <select class="name-input time-dropdown" ng-model="callback.callBackTime">
+                <option value="@Constants.CallMeBackTimeOptions.Morning">@Translate.TextByDomain(Constants.ContactListDomain, "Morning")</option>
+                <option value="@Constants.CallMeBackTimeOptions.Afternoon">@Translate.TextByDomain(Constants.ContactListDomain, "Afternoon") </option>
+                <option value="@Constants.CallMeBackTimeOptions.Evening">@Translate.TextByDomain(Constants.ContactListDomain, "Evening")</option>
+            </select>
+           
+        </div>*@
+        <div class="cb_bcontainer">
+            <span ng-click="callMeBack(callMeBackForm, $event)" class="contact-btn name-label">
+                @Translate.TextByDomain(Constants.CallMeBackDomain, "Call-me-back-button")</span>
+            <div class="cb_bfiller">&nbsp</div>
+        </div>
+
+        <div id="lbalert" class="lightbox">
+            <div class="lightbox-content">
+                <span class="lightboxclose cursor" onclick="closebox('lbalert');">&times;</span>
+                <div class="lightbox-title"> <h2 id="lbalert_title">Lightbox Title</h2></div>
+                <div id="lbalert_contents" class="lightbox-inner-content"> Inner Content</div>
+            </div>
+        </div>
+    </ng-form>
+</div>
+<!-- end of fixed bottom contact bar -->
+
+
+

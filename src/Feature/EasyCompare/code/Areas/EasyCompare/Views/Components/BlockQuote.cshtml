@@ -1,0 +1,22 @@
+﻿@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.IRTE>
+
+@if (Model != null)
+{
+    <div class="bq_box">
+        <div class="quote">
+            <div class="quotetext">
+                @if (Sitecore.Context.PageMode.IsExperienceEditor)
+                {
+                    @Editable(Model, x => x.Body)
+                }
+                else
+                {
+                    @Html.Raw(Model.Body)
+                }
+            </div>
+        </div>
+    </div>
+}
+

@@ -1,0 +1,570 @@
+﻿@using Sitecore.Globalization
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+
+@{ Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.PolicyDetails policy = new Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.PolicyDetails();
+    policy.CarName = "Mercedes";
+}
+@{ ViewBag.FromPage = "InsurancePlans";}
+@Html.Partial("~/Areas/EasyCompare/Views/Components/CarDetails.cshtml", policy)
+
+<div class="sort-header">
+    <div class="found-policy">
+        <span class="hide-for-small-only">@Translate.TextByDomain(Constants.CompareInsurancePlans, "WeHaveFound") {{quote.plans.length}} @Translate.TextByDomain(Constants.CompareInsurancePlans, "InsurancePlansForYou")</span>
+    </div>
+    <div class="filter-container">
+        <span onclick="show('lb_filter')" class="sort-by-filter">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Filter")</span>
+        @*<span class="sort-by-coverage" ng-click="sortPlans('Coverage', $event)">
+                Coverage  &nbsp;
+                <img ng-if="sortOption.Coverage == portalConstants.Ascending" class="sort-icon" src="/assets/easycompare/img/home/u495.png" />
+                <img ng-if="sortOption.Coverage ==  portalConstants.Descending" class="sort-icon" src="/assets/easycompare/img/home/u497.png" />
+            </span>*@
+        <span class="sort-by-budget" ng-click="sortPlans('Budget', $event)">
+            @Translate.TextByDomain(Constants.CompareInsurancePlans, "Budget")
+            <img ng-if="sortOption.Budget == portalConstants.Ascending" class="sort-icon" src="/assets/easycompare/img/home/u495.png" />
+            <img ng-if="sortOption.Budget == portalConstants.Descending" class="sort-icon" src="/assets/easycompare/img/home/u497.png" />
+        </span>
+        <span class="sort-by">@Translate.TextByDomain(Constants.CompareInsurancePlans, "SortBy")</span>
+    </div>
+</div>
+
+<div class="options_tiles">
+    <div class="tile__items">
+
+        <div class="grid ">
+
+            <div class=" tile_4_item grid-item pid-{{$index+1}}" ng-repeat="item in quote.plans">
+                <div class="package__details">
+                    <div class="package">
+                        <div class="company-title" back-img="{{item.iLogo}}">
+                            <div class="company-name">
+                                {{item.iName}}
+                            </div>
+                            <div class="insurance-type">
+                                <span ng-if="item.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryAndCompulsory")</span>
+                                <span ng-if="!item.hasCompulsory">@Translate.TextByDomain(Constants.CompareInsurancePlans, "VoluntaryOnly")</span>
+                            </div>
+                            <div class="insurance-type">
+                                {{quote.asset.carClass}}
+                            </div>
+                        </div>
+                        <div class="discount-container" ng-if="item.hasDis">
+                            <div class="d-item discount-type">@Translate.TextByDomain(Constants.CompareInsurancePlans, "DiscountedPremium") <br /><span class="d-value">{{item.premium | Amount }}</span></div>
+                        </div>
+                        <div class="discount-container" ng-if="!item.hasDis">
+                            <div class="d-item discount-type">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Premium") <br /><span class="d-value">{{item.premium | Amount }}</span></div>
+                        </div>
+                        <div class="additional-discount" ng-if="item.hasDis">additional <b>{{item.disPerc}}</b> off till {{item.disExpDt | ShortDate}}</div>
+                        <div class="package-btns">
+                            <span ng-if="!item.selected" class="compare-button" ng-click="selectItem(item, $event)">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Compare")</span>
+                            <span ng-if="item.selected == true" class="remove-button" ng-click="removeItem(item, $event)">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Remove")</span>
+                            <span ng-click="buyPolicy(item, $event)" class="buy-button">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Buy")</span>
+                        </div>
+                        <div class="detail-row suminsured">
+                            <span class="left-detail">@Translate.TextByDomain(Constants.CompareInsurancePlans, "SumInsured")</span>
+                            <span class="right-detail">{{item.sumInsured | SumInsured}}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="left-detail">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Deductible")</span>
+                            <span class="right-detail">{{item.odDeduct | SumInsured}}</span>
+                        </div>
+                        <div class="detail-row even">
+                            <span class="left-detail">@Translate.TextByDomain(Constants.CompareInsurancePlans, "OwnDamage")</span>
+                            <span class="right-detail">{{item.odSI | SumInsured}}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="left-detail">@Translate.TextByDomain(Constants.CompareInsurancePlans, "FireAndTheft")</span>
+                            <span class="right-detail">{{item.odFT | SumInsured}}</span>
+                        </div>
+                        @*<div class="detail-row even">
+                                <span class="left-detail">Excess</span>
+                                <span class="right-detail">500</span>
+                            </div>*@
+                        <div class="detail-row even">
+                            <span class="left-detail">@Translate.TextByDomain(Constants.CompareInsurancePlans, "RepairType")</span>
+                            <span class="right-detail" ng-if="!item.isAuthorisedGarage">@Translate.TextByDomain(Constants.CompareInsurancePlans, "NetworkGarage")</span>
+                            <span class="right-detail" ng-if="item.isAuthorisedGarage">@Translate.TextByDomain(Constants.CompareInsurancePlans, "DealerGarge")</span>
+                        </div>
+                        <div class="action-btn-container">
+                            <div class="btn-center btn-details" ng-click="viewPlan(item, $event)">
+                                @Translate.TextByDomain(Constants.CompareInsurancePlans, "SeeDetails")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="lbalert" class="lightbox">
+    <div class="lightbox-content">
+        <span class="lightboxclose cursor" onclick="closebox('lbalert');">&times;</span>
+        <div class="lightbox-title"> <h2 id="lbalert_title">Lightbox Title</h2></div>
+        <div id="lbalert_contents" class="lightbox-inner-content"> Inner Content</div>
+
+    </div>
+</div>
+
+<div id="lb_filter" class="lightbox">
+    <div class="lightbox-content">
+        <span class="lightboxclose cursor" onclick="closebox('lb_filter');">&times;</span>
+        <div id="lightbox_title" class="lightbox-title"> <h2>@Translate.TextByDomain(Constants.CompareInsurancePlans, "YourPreferences")</h2></div>
+        <div id="lightbox_contents" class="lightbox-inner-content">
+
+            <div class="filtercontent">
+                <div class="lb-form">
+                    <div class="boldtext">@Translate.TextByDomain(Constants.CompareInsurancePlans, "YourInsuranceVoluntary")</div>
+                    <div>@Translate.TextByDomain(Constants.CompareInsurancePlans, "CompulsoryInsurance")</div>
+                    <div id="insurance_1" ng-click="filterOption.IsIncludeCompulsory = true" ng-class="{'filter_on': filterOption.IsIncludeCompulsory == true}" class="ec_radio_l"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "Include")</span></div>
+                    <div id="insurance_2" ng-click="filterOption.IsIncludeCompulsory = false" ng-class="{'filter_on': filterOption.IsIncludeCompulsory == false}" class="ec_radio_r"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "Exclude")</span></div>
+                    <div><br /></div>
+                    <div class="boldtext">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Usage") @*<span ng-click="selectAllUsage($event)" class="selectall"> @Translate.TextByDomain(Constants.CompareInsurancePlans, "SelectBothUsage")</span>*@</div>
+                    <div class="input-container">
+                        <div id="usage_1" ng-click="toggleSelection('IsPersonal', $event)" ng-class="{'filter_on': filterOption.IsPersonal}" class="ec_radio_l"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "Personal")</span></div>
+                        <div id="usage_2" ng-click="toggleSelection('IsCommercial', $event)" ng-class="{'filter_on': filterOption.IsCommercial}" class="ec_radio_r"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "Commercial")</span></div>
+                    </div>
+                    <div><br /></div>
+                    <div class="boldtext">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Registration") @*<span ng-click="selectAllRegistration($event)" class="selectall"> @Translate.TextByDomain(Constants.CompareInsurancePlans, "SelectBothUsage")</span>*@</div>
+                    <div class="input-container">
+                        <div id="usage_1" ng-click="toggleSelection('IsBangkok', $event)" ng-class="{'filter_on': filterOption.IsBangkok}" class="ec_radio_l"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "Bangkok")</span></div>
+                        <div id="usage_2" ng-click="toggleSelection('IsUpcountry', $event)" ng-class="{'filter_on': filterOption.IsUpcountry}" class="ec_radio_r"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "Upcountry")</span></div>
+                    </div>
+                    <div><br /></div>
+                    <div class="boldtext">@Translate.TextByDomain(Constants.CompareInsurancePlans, "GarageType") @*<span ng-click="selectAllGarageType($event)" class="selectall"> @Translate.TextByDomain(Constants.CompareInsurancePlans, "SelectBothUsage")</span>*@</div>
+                    <div class="input-container">
+                        <div id="usage_1" ng-click="toggleSelection('IsNetwork',$event)" ng-class="{'filter_on': filterOption.IsNetwork}" class="ec_radio_l"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "Network")</span></div>
+                        <div id="usage_2" ng-click="toggleSelection('IsDealer',$event)" ng-class="{'filter_on': filterOption.IsDealer}" class="ec_radio_r"><span>@Translate.TextByDomain(Constants.CompareInsurancePlans, "Dealer")</span></div>
+                    </div>
+                    <div><br /></div>
+                </div>
+            </div>
+
+            <div class="filtercontent">
+
+                <div class="lb-form">
+                    <div class="boldtext">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Coverage")</div>
+
+                    @*<div class="filter-cb-container">
+                            <div id="garage" ng-click="toggleSelection('Garage', $event)" ng-class="{'filter_on': filterOption.Garage}" class="filter-checkbox-label">Garage</div>
+                        </div>*@
+                    <div class="filter-cb-container">
+                        <div id="deductible" ng-click="toggleSelection('Deductible', $event)" ng-class="{'filter_on': filterOption.Deductible}" class="filter-checkbox-label">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Deductible")</div>
+                    </div>
+                    <div class="filter-cb-container">
+                        <div id="flood" ng-click="toggleSelection('Flood', $event)" ng-class="{'filter_on': filterOption.Flood}" class="filter-checkbox-label">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Flood")</div>
+                    </div>
+                    <div class="filter-cb-container">
+                        <div id="fire" ng-click="toggleSelection('FireTheft', $event)" ng-class="{'filter_on': filterOption.FireTheft}" class="filter-checkbox-label">@Translate.TextByDomain(Constants.CompareInsurancePlans, "FireAndTheft")</div>
+                    </div>
+                    <div class="filter-cb-container">
+                        <div id="pa" ng-click="toggleSelection('PersonalAccident', $event)" ng-class="{'filter_on': filterOption.PersonalAccident}" class="filter-checkbox-label">@Translate.TextByDomain(Constants.CompareInsurancePlans, "PA")</div>
+                    </div>
+                    <div class="filter-cb-container">
+                        <div id="me" ng-click="toggleSelection('MedicalExpense', $event)" ng-class="{'filter_on': filterOption.MedicalExpense}" class="filter-checkbox-label">@Translate.TextByDomain(Constants.CompareInsurancePlans, "ME")</div>
+                    </div>
+                    <div class="filter-cb-container">
+                        <div id="bail" ng-click="toggleSelection('BailBond', $event)" ng-class="{'filter_on': filterOption.BailBond}" class="filter-checkbox-label">@Translate.TextByDomain(Constants.CompareInsurancePlans, "BailBond")</div>
+                    </div>
+                    @*<div class="filter-cb-container">
+                            <div id="wayside" ng-click="toggleSelection('Wayside', $event)" ng-class="{'filter_on': filterOption.Wayside}" class="filter-checkbox-label">Wayside</div>
+                        </div>*@
+                    <div><br /></div>
+                    <div class="boldtext">@Translate.TextByDomain(Constants.CompareInsurancePlans, "SumInsuredTHB")</div>
+
+                    <div class="filter-cb-container">
+                        <input id="f_suminsured" class="filter-form-input" ng-model="filterOption.SumInsured" placeholder="@Translate.TextByDomain(Constants.CompareInsurancePlans, "TypeSumInsured")" />
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="filteraction">
+                <button ng-click="filterPlans($event)" class="button-filter">@Translate.TextByDomain(Constants.CompareInsurancePlans, "Filter")</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    @*
+    function filter(array, key, value){
+        var i, j, hash = [], item;
+
+        for(i =  0, j = array.length; i<j; i++){
+            item = array[i];
+            if(typeof item[key] !== "undefined" && item[key] === value){
+                hash.push(item);
+            }
+        }
+
+        return hash;
+    }
+
+    function filteroptions (){
+
+        closebox("lb_filter");
+
+        var grid = document.querySelector('.grid');
+        var msnry = new Masonry( grid );
+
+        filtered = [];
+
+
+        filtered.push({"prop":"compulsory","value":$('input[name="f_compulsory"]:checked').val()});
+        filtered.push({"prop":"bangkok","value":$('input[name="f_bangkok"]:checked').val()});
+
+        if (document.getElementById("cb_garage").checked){
+            filtered.push({"prop":"garage","value":"true"});
+        }
+        if (document.getElementById("cb_deductible").checked){
+            filtered.push({"prop":"deductible","value":"true"});
+        }
+        if (document.getElementById("cb_flood").checked){
+            filtered.push({"prop":"flood","value":"true"});
+        }
+        if (document.getElementById("cb_ftheft").checked){
+            filtered.push({"prop":"firetheft","value":"true"});
+        }
+        if (document.getElementById("cb_pa").checked){
+            filtered.push({"prop":"pa","value":"true"});
+        }
+        if (document.getElementById("cb_me").checked){
+            filtered.push({"prop":"me","value":"true"});
+        }
+        if (document.getElementById("cb_bail").checked){
+            filtered.push({"prop":"bailbond","value":"true"});
+        }
+        if (document.getElementById("cb_wayside").checked){
+            filtered.push({"prop":"wayside","value":"true"});
+        }
+
+
+            for (i = 0; i < (options.length); i++) {
+
+                $('.pid-' + options[i]['id']).hide();
+
+            }
+
+             msnry.layout();
+
+
+            var byName=[];
+
+
+            for (i = 0; i < (filtered.length); i++) {
+                propitem = filtered[i]["prop"];
+                valueitem = filtered[i]["value"];
+
+                if (i==0){
+                    byName = byName.concat(filter(options, propitem, valueitem));
+                }else{
+                    byName = filter(byName, propitem, valueitem);
+                }
+
+
+            }
+
+
+
+            for (i = 0; i < (byName.length); i++) {
+
+                $('.pid-' + byName[i]['id']).show();
+                 msnry.layout();
+
+            }
+
+             msnry.layout();
+
+
+
+    }*@
+
+    @*
+    function show(box){
+        document.getElementById(box).style.display = "block";
+    }
+
+    function closebox(box){
+        document.getElementById(box).style.display = "none";
+    }
+        *@
+
+    @*
+    options = [
+
+    {id: 1, name: "Viriyah Insurance", title: "Basic", price: 5000, compulsory: "true", voluntary: "true", bangkok: "true", garage: "true", deductible: "true", flood: "false", firetheft: "false", pa: "false", me: "true", bailbond: "false", wayside: "false", dp:3000, od:400000, ft:5000, ex:500, ag: "true"},
+
+    {id: 2, name: "Viriyah Insurance", title: "Fire and Theft", price: 8000, compulsory: "true", voluntary: "false", bangkok: "true", garage: "true", deductible: "false", flood: "false", firetheft: "false", pa: "false", me: "false", bailbond: "false", wayside: "false", dp:3000, od:400000, ft:5000, ex:500, ag: "true"},
+
+    {id: 3, name: "Viriyah Insurance", title: "Platinum", price: 15000, compulsory: "false", voluntary: "true", bangkok: "true", garage: "true", deductible: "false", flood: "false", firetheft: "false", pa: "false", me: "false", bailbond: "false", wayside: "false", dp:3000, od:400000, ft:5000, ex:500, ag: "true"},
+
+    {id: 4, name: "Viriyah Insurance", title: "Silver", price: 12000, compulsory: "true", voluntary: "true", bangkok: "true", garage: "false", deductible: "false", flood: "false", firetheft: "false", pa: "false", me: "false", bailbond: "false", wayside: "false", dp:3000, od:400000, ft:5000, ex:500, ag: "true"},
+
+    {id: 5, name: "Viriyah Insurance", title: "Gold", price: 10000, compulsory: "true", voluntary: "true", bangkok: "true", garage: "true", deductible: "false", flood: "false", firetheft: "false", pa: "false", me: "false", bailbond: "false", wayside: "false", dp:3000, od:400000, ft:5000, ex:500, ag: "true"},
+
+
+    ];
+
+	selecteditems=[];
+
+	Number.prototype.formatMoney = function(c, d, t){
+		var n = this,
+	    c = isNaN(c = Math.abs(c)) ? 2 : c,
+	    d = d == undefined ? "." : d,
+	    t = t == undefined ? "," : t,
+	    s = n < 0 ? "-" : "",
+	    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+	    j = (j = i.length) > 3 ? j % 3 : 0;
+	   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+	 };
+
+
+     function getidindex(myArray, value){
+            for(var i = 0; i < myArray.length; i++) {
+                  if(myArray[i].id === value) {
+                            return i;
+                        }
+            }
+       }
+
+	 function card_remove(kim){
+
+			cs_kim = kim.substring(9);
+	 		cs_remove = cs_kim - 1;
+
+	 		cs_kim = selecteditems[cs_remove];
+
+			document.getElementById("btn_pc_" + cs_kim).className="compare-button";
+			document.getElementById("btn_pc_" + cs_kim).innerHTML="Compare";
+
+			if(cs_remove != -1) {
+				selecteditems.splice(cs_remove, 1);
+			}
+
+
+			for (i = 0; i < 4; i++) {
+				document.getElementById("card_selection_"+ (i - (-1))).style.display="block";
+				document.getElementById("card_selection_"+ (i - (-1))+"f").style.display="none";
+			}
+
+
+			for (i = 0; i < (selecteditems.length); i++) {
+				csn = (i - (-1));
+				document.getElementById("card_selection_"+ csn).style.display="none";
+				document.getElementById("card_selection_"+ csn +"f").style.display="block";
+
+				a = getidindex(options, i);
+
+				document.getElementById("cs_cn_" + csn).innerHTML=options[a]['name'];
+				document.getElementById("cs_it_" + csn).innerHTML=options[a]['title'];
+				document.getElementById("cs_p_" + csn).innerHTML=options[a]['price'].formatMoney(0, '.', ',') + " THB";
+			}
+
+
+
+
+
+
+	 }
+*@
+
+    function mcstogglesize(){
+
+        $("#mcard_selection_3").hide();
+        $("#mcard_selection_3f").hide();
+        $("#mcard_selection_4").hide();
+        $("#mcard_selection_4f").hide();
+
+        //document.getElementById("mcard_selection_3").style.display="none";
+        //document.getElementById("mcard_selection_3f").style.display="none";
+        //document.getElementById("mcard_selection_4").style.display="none";
+        //document.getElementById("mcard_selection_4f").style.display="none";
+
+        if(document.getElementById("cardselectionmobile").clientHeight < 80) {
+            document.getElementById("cardselectionmobile").style.height = "380px";
+        }else{
+
+            document.getElementById("cardselectionmobile").style.height = "60px";
+
+        }
+
+    }
+
+    @*
+	function cs_select(kim){
+
+
+		 var viewportwidth;
+		 var viewportheight;
+
+		 // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+
+		 if (typeof window.innerWidth != 'undefined')
+		 {
+		      viewportwidth = window.innerWidth,
+		      viewportheight = window.innerHeight
+		 }
+
+		// IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
+
+		 else if (typeof document.documentElement != 'undefined'
+		     && typeof document.documentElement.clientWidth !=
+		     'undefined' && document.documentElement.clientWidth != 0)
+		 {
+		       viewportwidth = document.documentElement.clientWidth,
+		       viewportheight = document.documentElement.clientHeight
+		 }
+
+		 // older versions of IE
+
+		 else
+		 {
+		       viewportwidth = document.getElementsByTagName('body')[0].clientWidth,
+		       viewportheight = document.getElementsByTagName('body')[0].clientHeight
+		 }
+
+
+		 //alert(viewportwidth);
+
+
+		if (document.getElementById(kim).className == "remove-button"){
+
+			cs_kim = kim.substring(7);
+			document.getElementById("btn_pc_" + cs_kim).className="compare-button";
+			document.getElementById("btn_pc_" + cs_kim).innerHTML="Compare";
+
+
+			var cs_remove = selecteditems.indexOf(cs_kim);
+			if(cs_remove != -1) {
+				selecteditems.splice(cs_remove, 1);
+			}
+
+
+			if (selecteditems.length == 0){
+				document.getElementById("cardsselectiontitle").innerHTML = "Select 2 plans to compare";
+			}
+			if (selecteditems.length == 1){
+				document.getElementById("cardsselectiontitle").innerHTML = "Select 1 more to compare";
+			}
+
+			if (selecteditems.length == 2){
+				document.getElementById("cardsselectiontitle").innerHTML = "Compare Selected";
+			}
+
+
+			for (i = 0; i < 4; i++) {
+				document.getElementById("card_selection_"+ (i - (-1))).style.display="block";
+				document.getElementById("card_selection_"+ (i - (-1))+"f").style.display="none";
+
+				document.getElementById("mcard_selection_"+ (i - (-1))).style.display="block";
+				document.getElementById("mcard_selection_"+ (i - (-1))+"f").style.display="none";
+
+			}
+
+
+			for (i = 0; i < (selecteditems.length); i++) {
+				csn = (i - (-1));
+				document.getElementById("card_selection_"+ csn).style.display="none";
+				document.getElementById("card_selection_"+ csn +"f").style.display="block";
+
+				document.getElementById("mcard_selection_"+ csn).style.display="none";
+				document.getElementById("mcard_selection_"+ csn +"f").style.display="block";
+
+                b = selecteditems[i] - 0;
+                a = getidindex(options, b);
+
+                document.getElementById("cs_cn_" + csn).innerHTML=options[a]['name'];
+                document.getElementById("cs_it_" + csn).innerHTML=options[a]['title'];
+                document.getElementById("cs_p_" + csn).innerHTML=options[a]['price'].formatMoney(0, '.', ',') + " THB";
+
+                document.getElementById("mcs_cn_" + csn).innerHTML=options[a]['name'];
+                document.getElementById("mcs_it_" + csn).innerHTML=options[a]['title'];
+                document.getElementById("mcs_p_" + csn).innerHTML=options[a]['price'].formatMoney(0, '.', ',') + " THB";
+
+
+			}
+
+	 		document.getElementById("mcard_selection_3").style.display="none";
+			document.getElementById("mcard_selection_3f").style.display="none";
+	 		document.getElementById("mcard_selection_4").style.display="none";
+			document.getElementById("mcard_selection_4f").style.display="none";
+
+
+		}else{
+
+				if ((viewportwidth > 1060 && selecteditems.length==4) || (viewportwidth < 1061 && selecteditems.length>1)) {
+					return;
+				}
+
+			cs_kim = kim.substring(7);
+
+
+			document.getElementById("btn_pc_" + cs_kim).className="remove-button";
+			document.getElementById("btn_pc_" + cs_kim).innerHTML="Remove";
+
+
+			for (i = 0; i < 4; i++) {
+				document.getElementById("card_selection_"+ (i - (-1))).style.display="block";
+				document.getElementById("card_selection_"+ (i - (-1))+"f").style.display="none";
+			}
+
+			selecteditems.push(cs_kim);
+
+
+			if (selecteditems.length == 1){
+				document.getElementById("cardsselectiontitle").innerHTML = "Select 1 more to compare";
+			}
+
+			if (selecteditems.length == 2){
+				document.getElementById("cardsselectiontitle").innerHTML = "Compare Selected";
+			}
+
+
+
+			for (i = 0; i < (selecteditems.length); i++) {
+				csn = (i - (-1));
+				document.getElementById("card_selection_"+ csn).style.display="none";
+				document.getElementById("card_selection_"+ csn +"f").style.display="block";
+
+				document.getElementById("mcard_selection_"+ csn).style.display="none";
+				document.getElementById("mcard_selection_"+ csn +"f").style.display="block";
+
+
+
+                b = selecteditems[i] - 0;
+                a = getidindex(options, b);
+
+
+
+                document.getElementById("cs_cn_" + csn).innerHTML=options[a]['name'];
+                document.getElementById("cs_it_" + csn).innerHTML=options[a]['title'];
+                document.getElementById("cs_p_" + csn).innerHTML=options[a]['price'].formatMoney(0, '.', ',') + " THB";
+
+                document.getElementById("mcs_cn_" + csn).innerHTML=options[a]['name'];
+                document.getElementById("mcs_it_" + csn).innerHTML=options[a]['title'];
+                document.getElementById("mcs_p_" + csn).innerHTML=options[a]['price'].formatMoney(0, '.', ',') + " THB";
+
+
+			}
+
+
+		}
+
+
+
+
+	}
+    *@
+
+</script>
+
+
+@if (!Sitecore.Context.PageMode.IsExperienceEditor)
+{
+    <script type="text/javascript">
+        var pageConfigData = @Html.Raw(ViewBag.PageConfigData);
+    </script>
+}

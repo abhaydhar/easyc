@@ -1,0 +1,54 @@
+﻿
+@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.ITopNavigatioModel>
+@using Sitecore.Mvc;
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare;
+
+@if (Model != null)
+{
+    <div class="header_bottom_left">
+        @foreach (var menuitem in Model.Children)
+        {
+            if (menuitem.TemplateId.ToString().ToUpper() == Constants.StandardPageTemplate.ToUpper())
+            {
+                if (!menuitem.ExcludeFromTopNavigation)
+                {
+                    <span class="header_menu_item" onclick="window.location.href='@menuitem.Url'" title="">
+                        @Editable(menuitem, x => x.TopNavigationTitle)
+                    </span>
+                }
+            }
+
+        }
+    </div>
+    <div class="header_bottom_right_icon">
+        @Html.Partial("~/Areas/EasyCompare/Views/Components/Search.cshtml")
+    </div>
+    <div class="header_bottom_right">
+        @Html.Sitecore().Placeholder("CountrySelector")
+
+    </div>
+    // Mobile View html
+    <div id="menuBtn" class="header_bottom_left_mobile">
+        <img width="25" src="/assets/easycompare/img/hamburger-menu.png">
+    </div>
+    <div id="widgetMenu" class="hidden widgetsmenu">
+        <ul class="twopanel-menu right-panel">
+            @foreach (var menuitem in Model.Children)
+            {
+                if (menuitem.TemplateId.ToString().ToUpper() == Constants.StandardPageTemplate.ToUpper())
+                {
+                    if (!menuitem.ExcludeFromTopNavigation)
+                    {
+                        <li class="menu-header" onclick="window.location.href='@menuitem.Url'" title="">
+                            @menuitem.TopNavigationTitle
+                        </li>
+                    }
+                }
+            }
+        </ul>
+    </div>
+
+
+}
+
+

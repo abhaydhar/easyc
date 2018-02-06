@@ -1,0 +1,93 @@
+﻿@using Sitecore.Mvc.Analytics.Extensions
+@using Sitecore.Mvc;
+@using Celes.Framework.Common.Extensions
+@using Sitecore.Mvc.Analytics.Extensions
+
+@{
+    string pageEditorCss = string.Empty;
+
+    if (Sitecore.Context.PageMode.IsPageEditor)
+    {
+        pageEditorCss = "sitecore-editor";
+    }
+
+    if (Sitecore.Context.PageMode.IsPreview)
+    {
+        pageEditorCss = "sitecore-preview";
+    }
+    var siteLangeuage = Sitecore.Context.Language.ToString();
+
+    var ngControllerName = Sitecore.Context.Item.Fields[new Sitecore.Data.ID("{5949CDD2-D5A2-4972-AD13-B0B406188A4E}")];
+    var hasNgController = (ngControllerName != null && !string.IsNullOrEmpty(ngControllerName.Value));
+
+    if(Sitecore.Context.PageMode.IsExperienceEditor || Sitecore.Context.PageMode.IsPreview)
+    {
+        hasNgController = false;
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+            'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-TQH483K');</script>
+    <!-- End Google Tag Manager -->
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Language" content="en,th" />
+    <link rel="stylesheet" href="/assets/easycompare/css/main.css"/>
+    @*<link href="/assets/easycompare/css/swiper.min.css" rel="stylesheet" />*@
+    <link rel="stylesheet" href="/assets/easycompare/css/swiper.min.css" media="none" onload="if(media!='all')media='all'">
+    <noscript><link rel="stylesheet" href="/assets/easycompare/css/swiper.min.css"></noscript>
+    <link rel="stylesheet" href="/assets/easycompare/css/fonts.css" media="none" onload="if(media!='all')media='all'">
+    <noscript><link rel="stylesheet" href="/assets/easycompare/csss/fonts.css"></noscript>
+
+    @Html.Sitecore().Placeholder("PageCss")
+    <title>@Sitecore.Context.Item["Page Title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+
+    @*<script type="text/javascript" src="//ajax.microsoft.com/ajax/jQuery/jquery-1.4.2.min.js"></script>*@
+     <script type="text/javascript" src="/assets/easycompare/js/vendor/jquery-1.4.2.min.js"></script>
+    <script>jQuery.noConflict();</script>
+    @*<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>*@
+    <script async type="text/javascript" src="/assets/easycompare/js/vendor/modernizr.min.js"></script>
+    <script type="text/javascript" src="/assets/easycompare/js/ec.quote.min.js"></script>
+    @Html.Sitecore().VisitorIdentification()
+</head>
+<div class="bgloader"><div class="loader"></div></div>
+
+<body ng-app="easyCompare" @Html.CelesAntiForgeryToken() @(hasNgController ? @Html.Raw("ng-controller='" + ngControllerName.Value + "'") : null) @(!Sitecore.Context.PageMode.IsExperienceEditor ? "ng-cloak" : "")>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TQH483K"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    @*<!--Google Analytics Script add-->
+        @Html.Sitecore().Placeholder("analytics")
+        <!--End Google Analytics Script -->*@
+    <header class="centered-content">
+        @Html.Sitecore().Placeholder("Header")
+    </header>
+    <main class="centered-content">
+        @Html.Sitecore().Placeholder("Main")
+    </main>
+
+    @Html.Sitecore().Placeholder("Footer")
+
+    @Html.Sitecore().Placeholder("CallMeBack")
+
+    <script src="/assets/easycompare/js/common.js"></script>
+    <script src="/assets/easycompare/js/main-.js"></script>
+
+</body>
+</html>

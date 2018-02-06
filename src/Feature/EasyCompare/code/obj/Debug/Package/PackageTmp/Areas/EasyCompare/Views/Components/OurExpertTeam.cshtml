@@ -1,0 +1,58 @@
+﻿@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.Component.IOurExpertTeam>
+
+@if (Model != null)
+{
+    <div class="greybg">
+
+        <a name="mission"></a>
+
+        <span class="article__title">@Editable(x => x.Title)</span><br>
+        <div class="article__summary">@Editable(x => x.SubTitle)</div>
+
+        <div class="four-columns">
+            @foreach (var profile in Model.ProfileCardLst)
+            {
+                <div class="oneofourth">
+                    @if (profile.ProfileImage != null)
+                    {
+                        if (Sitecore.Context.PageMode.IsExperienceEditor)
+                        {
+                            @*<div class="headphoto" style="background-image: url('./img/geoffrey.jpg')"></div>*@
+                            @RenderImage(profile , x => x.ProfileImage, new { width =100}, true)
+                        }
+                        else
+                        {
+                            <div class="headphoto" style="background-image: url('@profile.ProfileImage.Src')"></div>
+                        }
+                    }
+
+
+                    <div class="au_name">@Editable(profile, x => x.Name)</div>
+                    <div class="au_title">@Editable(profile, x => x.Role)</div>
+                    <div class="au_text">@Html.Raw(profile.RoleDescription)</div>
+                    @if (profile.ProfEmailLink != null)
+                    {
+                        if (Sitecore.Context.PageMode.IsExperienceEditor)
+                        {
+                            <div class="au_email">
+                                @RenderLink(profile, x => x.ProfEmailLink, isEditable: true)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="au_email">
+                                <a href="@profile.ProfEmailLink.Url">@profile.ProfEmailLink.Text</a>
+                            </div>
+                        }
+
+                    }
+
+                </div>
+            }
+
+        </div>
+    </div>
+}
+

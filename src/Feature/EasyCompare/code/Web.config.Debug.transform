@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- For more information on using web.config transformation visit http://go.microsoft.com/fwlink/?LinkId=125889 -->
+
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+    <appSettings>
+        <add xdt:Transform="Remove" xdt:Locator="Match(key)" key="EasyCompare.PortalServerApiBaseUrl" />
+        <add xdt:Transform="Remove" xdt:Locator="Match(key)" key="EasyCompare.PolicyServerApiBaseUrl" />
+        
+        <add xdt:Transform="InsertIfMissing" xdt:Locator="Match(key)" key="EasyCompare.PortalServerApiBaseUrl" value="http://portal.local.budget.com.th/" />
+        <add xdt:Transform="InsertIfMissing" xdt:Locator="Match(key)" key="EasyCompare.PolicyServerApiBaseUrl" value="http://portal.local.budget.com.th/policy/" />
+    </appSettings>
+  <system.net xdt:Transform="InsertIfMissing">
+    <mailSettings xdt:Transform="InsertIfMissing">
+      <smtp xdt:Transform="InsertIfMissing">
+        <network  userName="sitecoresvc" password="P@ssw0rd1" host="smtp.sendgrid.net" port="25" xdt:Transform="InsertIfMissing"/>
+      </smtp>
+    </mailSettings>
+  </system.net>
+</configuration>

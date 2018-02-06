@@ -1,0 +1,73 @@
+﻿@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@model Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.ContactDetails
+ @using Sitecore.Globalization
+<div class="main-container">
+    <ng-form name="carForm">
+        <span class="policyform__title">@Translate.TextByDomain(Constants.ContactListDomain, "ContactDetails")</span>
+        <div class="p-input-form firstquestion fullwidth">
+            @*<div class="form-input-label">@Translate.TextByDomain(Constants.ContactListDomain, "Name")</div>*@
+            <div class="input-container fullwidth">
+                <input placeholder="@Translate.TextByDomain(Constants.ContactListDomain,"Name")" ng-class="{'inputerror': carForm.FirstName.$invalid && carForm.FirstName.$dirty}" name="FirstName" ng-model="contact.FirstName" class="form-input" type="text" required />
+                @*<input placeholder="@Translate.TextByDomain(Constants.ContactListDomain,"Enter Your Last Name")" ng-model="contact.LastName" class="form-input" type="text" />*@
+            </div>
+        </div>
+        <div class="p-input-form">
+            @*<div class="form-input-label">@Translate.TextByDomain(Constants.ContactListDomain, "E-mail")</div>*@
+            <div class="input-container fullwidth">
+                <input placeholder="@Translate.TextByDomain(Constants.ContactListDomain,"E-mail")" ng-class="{'inputerror': carForm.Email.$invalid && carForm.Email.$dirty}" emailaddress name="Email" ng-model="contact.Email" class="form-input" type="text" required />
+            </div>
+        </div>
+        <div class="p-input-form">
+            @*<div class="form-input-label">@Translate.TextByDomain(Constants.ContactListDomain, "Phone Number")</div>*@
+            <div class="input-container fullwidth">
+                <input placeholder="@Translate.TextByDomain(Constants.ContactListDomain,"Phone Number")" ng-model="contact.Phone" class="form-input" type="text" />
+            </div>
+        </div>
+        @*<div class="p-input-form">
+            <div class="form-input-label">@Translate.TextByDomain(Constants.ContactListDomain, "Line ID")</div>
+            <div class="input-container">
+                <input placeholder="@Translate.TextByDomain(Constants.ContactListDomain,"Enter Your Line ID")" ng-model="contact.LineId" class="form-input" type="text" />
+            </div>
+        </div>*@
+        @*<div class="p-input-form">
+            <div class="form-input-label">@Translate.TextByDomain(Constants.ContactListDomain, "When we can call you?")</div>
+            <div class="input-container">
+                <select placeholder="@Translate.TextByDomain(Constants.ContactListDomain, "When we can call you?")" class="form-input" ng-model="contact.CallBackTime">
+                    <option value="@Constants.CallMeBackTimeOptions.Morning">@Translate.TextByDomain(Constants.ContactListDomain, "Morning")</option>
+                    <option value="@Constants.CallMeBackTimeOptions.Afternoon">@Translate.TextByDomain(Constants.ContactListDomain, "Afternoon") </option>
+                    <option value="@Constants.CallMeBackTimeOptions.Evening">@Translate.TextByDomain(Constants.ContactListDomain, "Evening")</option>
+                </select>
+            </div>
+        </div>*@
+        <div class="p-input-form">
+            <div class="form-input-label">@Translate.TextByDomain(Constants.ContactListDomain, "form-subscribe-receive-newsletter")</div>
+            <div class="input-container fullwidth100">
+                <div id="aaq_yes" ng-click="contact.IsSubscribeNewsPromo='yes'" ng-class="{'ec_radio_selected': contact.IsSubscribeNewsPromo=='yes'}" class="ec_radio_l">@Translate.TextByDomain(Constants.ContactListDomain, "form-subscribe-radio-option-yes")</div><div id="aaq_no" ng-click="contact.IsSubscribeNewsPromo='no'" ng-class="{'ec_radio_selected': contact.IsSubscribeNewsPromo=='no'}" class="ec_radio_r">@Translate.TextByDomain(Constants.ContactListDomain, "form-subscribe-radio-option-no")</div>
+
+                @*<input id="rblSubYes" type="radio" value="yes" ng-model="contact.IsSubscribeNewsPromo"><label for="rblSubYes">@Translate.TextByDomain(Constants.ContactListDomain, "form-subscribe-radio-option-yes")</label>
+                <input id="rblSubNo" type="radio" value="no" ng-model="contact.IsSubscribeNewsPromo"><label for="rblSubNo">@Translate.TextByDomain(Constants.ContactListDomain, "form-subscribe-radio-option-no")</label>*@
+            </div>
+        </div>
+        @*<div class="p-input-form" ng-if="contact.IsSubscribeNewsPromo == 'yes'">
+            <div class="form-input-label">@Translate.TextByDomain(Constants.ContactListDomain, "form-subscribe-preferred-contact")</div>
+            <div class="input-container">
+                <input id="chkSubMail" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="contact.IsSubscribeMail"><label for="chkSubMail">@Translate.TextByDomain(Constants.ContactListDomain, "form-subscribe-option-mail")</label>
+                <input id="chkSubEmail" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="contact.IsSubscribeEmail"><label for="chkSubEmail">@Translate.TextByDomain(Constants.ContactListDomain, "form-subscribe-option-email")</label>
+                <input id="chkSubSms" type="checkbox" ng-true-value="1" ng-false-value="0"  ng-model="contact.IsSubscribeSMS"><label for="chkSubSms">@Translate.TextByDomain(Constants.ContactListDomain, "form-subscribe-option-sms")</label>
+            </div>
+        </div>*@
+        <div class="p-input-form fullwidth">
+            <button ng-click="confirmQuote(carForm, $event)" class="button-submit">@Translate.TextByDomain(Constants.ContactListDomain, "Apply Now")</button>
+        </div>
+
+        <div id="lbalert" class="lightbox">
+            <div class="lightbox-content">
+                <span class="lightboxclose cursor" onclick="closebox('lbalert');">&times;</span>
+                <div class="lightbox-title"> <h2 id="lbalert_title">Lightbox Title</h2></div>
+                <div id="lbalert_contents" class="lightbox-inner-content"> Inner Content</div>
+
+            </div>
+        </div>
+
+    </ng-form>
+</div>

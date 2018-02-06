@@ -1,0 +1,30 @@
+﻿@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.EasyCompare.Areas.EasyCompare.Models.FAQ>
+@using Sitecore.Feature.EasyCompare.Areas.EasyCompare
+@using Sitecore.Globalization
+@if (Model != null)
+{
+    <span class="article__title">@Editable(Model, x => x.Title)</span>
+            <div class="article__summary">@Editable(Model, x => x.SubTitle)</div>
+    var count = 1;
+
+    foreach (var questions in Model.Children.ToList())
+    {
+        if (count == 2)
+        {
+                <span class="policyform__title">@Editable(questions, x => x.Question)</span>
+                <div class="article__summary"> @Editable(questions, x => x.Answer)</div>
+            {
+                count = 1;
+            }
+        }
+        else
+        {
+            <span class="policyform__title">@Editable(questions, x => x.Question)</span>
+                <div class="article__summary"> @Editable(questions, x => x.Answer)</div>
+            {
+                count = 2;
+            }
+        }
+
+    }
+}
